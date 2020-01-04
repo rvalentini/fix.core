@@ -1,0 +1,74 @@
+Note: the messages below have had their CompIDs adjusted thus the Checksum (10=) value is not correct.
+-- Posted by Scott Atwell, American Century scott_atwell@americancentury.com on Feb 28, 2000
+
+
+8=FIX.4.19=11235=049=BRKR56=INVMGR34=23552=19980604-07:58:28112=19980604-07:58:2810=157
+8=FIX.4.19=15435=649=BRKR56=INVMGR34=23652=19980604-07:58:4823=11568528=N55=SPMI.MI54=227=20000044=10100.00000025=H10=159
+8=FIX.4.19=9035=049=INVMGR56=BRKR34=23652=19980604-07:59:3010=225
+8=FIX.4.19=11235=049=BRKR56=INVMGR34=23752=19980604-07:59:48112=19980604-07:59:4810=225
+8=FIX.4.19=15435=649=BRKR56=INVMGR34=23852=19980604-07:59:5623=11568628=N55=FIA.MI54=227=25000044=7900.00000025=H10=231
+8=FIX.4.19=9035=049=INVMGR56=BRKR34=23752=19980604-08:00:3110=203
+8=FIX.4.19=15435=649=BRKR56=INVMGR34=23952=19980604-08:00:3623=11568728=N55=PIRI.MI54=127=30000044=5950.00000025=H10=168
+8=FIX.4.19=9035=049=INVMGR56=BRKR34=23852=19980604-08:01:3110=026
+8=FIX.4.19=11235=049=BRKR56=INVMGR34=24052=19980604-08:01:36112=19980604-08:01:3610=190
+8=FIX.4.19=9035=049=INVMGR56=BRKR34=23952=19980604-08:02:3110=026
+8=FIX.4.19=11235=049=BRKR56=INVMGR34=24152=19980604-08:02:36112=19980604-08:02:3610=018
+8=FIX.4.19=9035=049=INVMGR56=BRKR34=24052=19980604-08:03:3110=220
+
+
+
+*** Example logon exchange without encryption ***
+Note: the messages below have had their CompIDs adjusted thus the Checksum (10=) value is not correct.  
+-- Posted by Scott Atwell, American Century scott_atwell@americancentury.com on Apr 26, 2000
+8=FIX.4.19=6135=A49=INVMGR56=BRKR34=152=20000426-12:05:0698=0108=3010=157
+8=FIX.4.19=6135=A49=BRKR56=INVMGR98=034=152=20000426-12:05:08108=3010=143
+
+
+
+
+*** Example logon exchange using PGP-DES-MD5 ***
+Note: the messages below have had their CompIDs adjusted thus the Checksum (10=) value is not correct.  
+Note: binary data for RawData and Signature fields are represented with dots (.)
+Note: before and after versions of SecureData (PGP block) fields are presented separately
+-- Posted by Scott Atwell, American Century scott_atwell@americancentury.com on Apr 26, 2000
+
+8=FIX.4.19=69035=A49=INVMGR56=BRKR98=590=62591=-----BEGIN PGP MESSAGE-----
+Version: 2.7.1
+
+hIwDDrony+hQ+FEBA/9qd5Vcdw2w2DSKx3+XbqOhWz9xZ07RYRyhKDG/qE5EQbYu
+6srrDowCzscPb9+krWcxH4xL3B/1DEwL3QpQsxCSGY1JnbjDCTyJ21nuZ6NHY6YA
+AAECr4mTIlZgM5hmSmrlunDoeOQWwPkca9OCWh0n3VXfGkA7e99DCq0P3MZ48Jlr
+GNF141hwWLIpN2RfqYvfzPD0w7I54wf3z/sYefGj+a0QTt1JOLEFxzsPykIyMPEI
+kGfdjuzOL8/94plkeeWSJHx7K6IemVRsT6HwLJtFaW/JIJr+hxYr1Z8BBjyXoQCz
+argut9niFOcnSqwvZolAYqjMPrkWuaeJn+bJ4kCEuLGdrQJDHvlzOS6r3By80IUc
+2L4W7yJL7Am82wTWD4s5ANBQz8FCwLtLMivUTvqsg/Zp8v7vSQ1FfEIsg30XXtBL
+6QBYtnYnAAAwCEOrv6DavDTfhWl72D6VfiOLrHIHtEQf3iwb5JFHGRaMpX88VlSU
+W7qy163o78rIEL3WEak4pwmnf28P
+=v9gz
+-----END PGP MESSAGE-----
+93=1689=................10=161
+
+*** Note the "91=" value decrypts (PGP encrypted length=625, cleartext length=67) to:   34=152=20000426-12:00:11108=3095=2496=.......................
+*** Decrypted "expanded" message is:  8=FIX.4.09=69035=A49=INVMGR56=BRKR98=534=152=20000426-12:00:11108=3095=2496=.......................93=1689=................10=161
+
+
+
+8=FIX.4.19=72335=A49=BRKR56=INVMGR90=65891=-----BEGIN PGP MESSAGE-----
+Version: 4.0 Business Edition
+
+hIwCe1B6T5v0aJEBA/4q4sAo1j2edIg+3EVo7aJLaa1x7ROP8Qo+bFp6Sz3Bbmy+
+3E5FqiNdxPmef7gw3uD8kAyCabTNhVVqkILcLtZUlNHd0Ot1SXdmDkCF491gxKYA
+BHHseF18YHsivEJoFtI61fgfQ/uNoy4lTu1CUHBAic6ordEVMiLwTV7qAxnfYeJP
+AAEFIZC6jUExoRE61x2insn75/hULOlnKIZhNqfr4zVfjT25qddVHOoHMxZKo602
+Vn+y+aDg0GjdMFSioIbbd0ZvsJDBrs9fPf67oXVfdlg1oCMrtPRp6CNwqnw/uRsg
+1gUTmTB5XH3V0AQHTI7/qyqYTQ1mGlo6Gi8Z6M8XTwvHXeWK2Yb1Dus6eTgZfPgb
+plGjq/a/ejAdICGg7RyJznEkrppHMDE8XXiypw01Dad6jvC8JvqSK8w7ZOI3mgjd
+UbAuZ5SWIpBpW3N7sn+TN1+WdpB7R108dPdd4UPu4TXWZYbE5vKFwhC98r68GgxZ
+l84elHJCP8A960GIegKS5UD2TA1z7yIR
+=bmt2
+-----END PGP MESSAGE-----
+98=593=1689=................10=008
+
+*** Note the "91=" value decrypts (PGP encrypted length=658, cleartext length=75) to:   34=150=XXXX52=20000426-12:00:18108=3095=2496=.......................98=5
+*** Decrypted "expanded" message is:  8=FIX.4.19=72335=A49=BRKR56=INVMGR34=150=BARD52=20000426-12:00:18108=3095=2496=.......................98=593=1689=................10=008
+
