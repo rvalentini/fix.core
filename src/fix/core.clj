@@ -6,8 +6,9 @@
   [& args]
   (println "Hello, World!"))
 
+;;TODO split namespace into smaller parts -> each type gets own namespace + one for primitives
+;;TODO make a separate project for simple client, which handles binary encoding with ASCII 01 separator and TCP connection
 
-;;TODO write some test for utc-timestamp with and without millis
 (def utc-timestamp #"^(-?(?:[1-9][0-9]*)?[0-9]{4})(1[0-2]|0[1-9])(3[01]|0[1-9]|[12][0-9])-(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\.[0-9]{3})?$")
 
 (spec/def ::utc-timestamp #(re-matches utc-timestamp %))
@@ -36,5 +37,40 @@
 
 (spec/def ::check-sum string?)
 
-
 (spec/def ::heartbeat-msg (spec/and ::standard-header ::standard-trailer))
+
+
+
+(spec/def ::cl-ord-id string?)
+(spec/def ::symbol string?)
+
+(spec/def ::instrument
+  {:55 ::symbol
+   ;;TODO some more -> none of the TAGs are required which is strange
+   })
+
+(spec/def ::qty #(or (float? %) (int? %)))
+(spec/def ::percent float?)
+
+(spec/def ::order-qty ::qty)
+(spec/def ::cash-order-qty ::qty)
+(spec/def ::order-percent ::percent)
+(spec/def ::rounding-direction char?)
+(spec/def ::rounding-modulus float?)
+(spec/def ::side char?)
+(spec/def ::transact-time ::utc-timestamp)
+
+(spec/def ::order-qty-data
+  {:38 ::order-qty
+   :152 ::cash-order-qty
+   :516 ::order-percent
+   :468 ::rounding-direction
+   :469 ::rounding-modulus})
+
+(spec/def ::new-order-single
+  (spec/and ::standard-header
+            {:11 ::cl-ord-id}
+            ::instrument
+            {:54 ::side :60 ::transact-time}
+            ::order-qty-data
+            ::standard-trailer))
