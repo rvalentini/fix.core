@@ -20,24 +20,29 @@
 (spec/def ::field field?)
 
 
-(defn escape [field-map]
-  ;;TODO extract in loop tp remove outer brakets  {:56 {:name :this-is-the-name :type :INT}
-  `(def "fields" {:blah ~@field-map}))
 
 
+;;TODO move to generator namespace
+(defn generate-source-file [fields]
+  (let [header '(ns fix.fields)
+        var `(def ~'fields ~fields)]
+    (spit "src/fix/fields.clj" header)
+    (spit "src/fix/fields.clj" "\n\n" :append true)
+    (spit "src/fix/fields.clj" var :append true)))
 
-;;TODO generate a new namespace containing the resulting
-(defn generate-field-map [fields]
-  (let [triple (map (fn [field]
-                      (let [name (get-in field [:attrs :name])
-                            type (keyword (get-in field [:attrs :type]))
-                            number (keyword (get-in field [:attrs :number]))]
+;;TODO NEXT:
+;;TODO (1) Take care of enum restrictions for field values as Spec
+;;TODO (2) Define possible field types as Spec
+
+
+(defn build-field-map [fields]
+  (let [field-entries (map (fn [field]
+                      (let [name (get-in field [:attrs :name]) ;;TODO get possible INT values (=enum) from content for some fields
+                            type (keyword (get-in field [:attrs :type])) ;;TODO e.g. [{:tag :value, :attrs {:description NERC_EASTERN_OFF_PEAK, :enum 0}, :content nil}
+                            number (keyword (get-in field [:attrs :number]))] ;;TODO maybe solvable with map {:number [possible enums]} as spec
                         {number {:name name :type type}}))
                      fields)]
-    (println triple)
-    (doseq [field triple]
-      (println field))
-    triple))
+    (reduce merge {} field-entries)))
 
 
 
@@ -49,11 +54,13 @@
                          (comp #(contains? % :number) :attrs)) seq)
         messages (filter (comp #{:message} :tag) seq)
         components (filter (comp #{:component} :tag) seq)]
-
-    (generate-field-map fields)))
+    (doseq [field fields]
+      (println field))
+    (build-field-map fields)))
 
 (println
   (spec/conform ::field [:101 "jndskncds"]))
 
 (let [field-map (parse "resources/FIX50SP2.xml")]
-  #_(println (escape field-map)))
+  (println field-map)
+  (generate-source-file field-map))
