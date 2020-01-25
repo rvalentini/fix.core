@@ -1,6 +1,5 @@
 (ns fix.core-test
   (:require [clojure.test :refer :all]
-            [fix.core :as core]
             [clojure.spec.alpha :as spec]
             [fix.primitives :as p ]))
 
