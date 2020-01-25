@@ -1,4 +1,4 @@
-(ns fix.fields-test
+(ns fix.primitives-test
   (:require [clojure.test :refer :all]
             [clojure.spec.alpha :as spec]
             [fix.fields-spec :as fs]))
@@ -18,4 +18,4 @@
     (is (not (spec/valid? ::fs/field [:1450 "SD" "SD"])))
     ))
 
-(fields-spec-test)
+(fields-spec-test) ;TODO remove

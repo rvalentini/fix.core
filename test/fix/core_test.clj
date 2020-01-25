@@ -28,5 +28,5 @@
     (is (not (spec/valid? ::p/qty 1/2)))))
 
 
-(utc-timestamp-regex-test)
-(qty-datatype-test)
+(utc-timestamp-regex-test) ;TODO remove
+(qty-datatype-test) ;TODO remove

@@ -1,7 +1,7 @@
 (ns fix.core
   (:gen-class)
-  (:require [parser.xml-parser :as parser]
-            [generator.field-generator :as generator]))
+  (:require [fix.parser.xml-parser :as parser]
+            [fix.generator.field-generator :as generator]))
 
 (defn -main
   [& args]
@@ -12,7 +12,9 @@
 
 (-main)
 ;;TODO NEXT:
-;;TODO (2) Define possible field types as Spec
+;;TODO (1) Define all possible field types as Spec
+;;TODO (2) remove deprecated spec ns
+
 
 
 

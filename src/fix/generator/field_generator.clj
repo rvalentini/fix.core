@@ -1,4 +1,4 @@
-(ns generator.field-generator)
+(ns fix.generator.field-generator)
 
 
 (defn- spit-to-file [field-map]

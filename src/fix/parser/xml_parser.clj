@@ -1,4 +1,4 @@
-(ns parser.xml-parser
+(ns fix.parser.xml-parser
   (:require [clojure.xml :as xml]))
 
 (defn parse [file]
