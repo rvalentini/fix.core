@@ -9,8 +9,26 @@
 
 
 (def type-specs
-  {:STRING ::p/string}) ;TODO extends mapping raw data -> primitive spec types
+  {:STRING ::p/string
+   :INT ::p/int
+   :CHAR ::p/char
+   :NUMINGROUP ::p/num-in-group
+   :FLOAT ::p/float
+   :AMT ::p/amt
+   :UTCTIMESTAMP ::p/utc-timestamp
+   :DATA ::p/data
+   :LENGTH ::p/length
+   :PERCENTAGE ::p/percent
+   :BOOLEAN ::p/boolean
+   :EXCHANGE ::p/exchange
+   :PRICE ::p/price
+   :QTY ::p/qty
+   :CURRENCY ::p/currency
+   :PRICEOFFSET ::p/price-offset
+   :TZTIMEONLY ::p/tz-time-only})
 
+;TODO extends mapping raw data -> primitive spec types
+;TODO current position :1079 TZTIMEONLY
 
 (defn raw->spec [raw-data-type]
   (if raw-data-type
