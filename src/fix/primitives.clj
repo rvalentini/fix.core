@@ -8,6 +8,15 @@
 (def tz-time #"^(2[0-3]|1[0-9]|0[0-9]):([0-5][0-9])(:[0-5][0-9])?(Z|[\+|-](2[0-3]|[01][0-9])(:[0-5][0-9])?)?$")
 (spec/def ::tz-time-only #(re-matches tz-time %))
 
+(def local-mkt-date #"^(\d{4})(1[0-2]|0[1-9])([1-2][0-9]|0[1-9]|3[0-1])$")
+(spec/def ::local-mkt-date #(re-matches local-mkt-date %))
+
+(def month-year #"^(\d{4})(1[0-2]|0[1-9])(([1-2][0-9]|0[1-9]|3[0-1])|(w[1-5]))?$")
+(spec/def ::month-year #(re-matches month-year %))
+
+(def multiple-char-value #"^(?:[a-zA-Z]\s)*[a-zA-Z]{1}$")
+(spec/def ::multiple-char-value #(re-matches multiple-char-value %))
+
 (spec/def ::string string?)
 (spec/def ::int int?)
 (spec/def ::char char?)
@@ -27,7 +36,9 @@
 (spec/def ::qty #(or (float? %) (int? %)))
 (spec/def ::currency #(and (string? %) (= (count %) 3)))
 (spec/def ::price-offset float?)
-
+(spec/def ::language #(and (string? %) (= (count %) 2)))
+(spec/def ::seq-num pos-int?)
+(spec/def ::country #(and (string? %) (= (count %) 2)))
 
 
 (spec/def ::cl-ord-id string?)
@@ -48,7 +59,6 @@
 (spec/def ::msg-type string?)     ;TODO must be third tag in message
 (spec/def ::sender-comp-id string?)
 (spec/def ::target-comp-id string?)
-(spec/def ::msg-seq-num pos-int?)
 (spec/def ::sending-time ::utc-timestamp)
 
 (spec/def ::check-sum string?)

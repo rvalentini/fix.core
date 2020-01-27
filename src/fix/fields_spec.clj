@@ -25,10 +25,16 @@
    :QTY ::p/qty
    :CURRENCY ::p/currency
    :PRICEOFFSET ::p/price-offset
-   :TZTIMEONLY ::p/tz-time-only})
+   :TZTIMEONLY ::p/tz-time-only
+   :LOCALMKTDATE ::p/local-mkt-date
+   :LANGUAGE ::p/language
+   :SEQNUM ::p/seq-num
+   :COUNTRY ::p/country
+   :MONTHYEAR ::p/month-year
+   :MULTIPLECHARVALUE ::p/multiple-char-value
+   })
 
 ;TODO extends mapping raw data -> primitive spec types
-;TODO current position :1079 TZTIMEONLY
 
 (defn raw->spec [raw-data-type]
   (if raw-data-type
