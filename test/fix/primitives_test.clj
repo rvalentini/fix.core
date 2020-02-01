@@ -4,7 +4,7 @@
             [fix.primitives :as p ]))
 
 
-(deftest utc-timestamp-regex-test
+(deftest utc-timestamp-test
   (testing "spec for UTC timestamp data type is correctly defined"
     (is (spec/valid? ::p/utc-timestamp "20190713-15:22:10.845"))
     (is (spec/valid? ::p/utc-timestamp "20190713-00:18:10.845"))
@@ -19,6 +19,29 @@
     (is (not (spec/valid? ::p/utc-timestamp "A0190713-15:22:10.845")))
     (is (not (spec/valid? ::p/utc-timestamp "20190713-15:22:10.sss")))))
 
+(deftest utc-time-only-test
+  (testing "spec for UTC time-only data type is correctly defined"
+    (is (spec/valid? ::p/utc-time-only "22:10:00.845"))
+    (is (spec/valid? ::p/utc-time-only "18:10:44.845"))
+    (is (spec/valid? ::p/utc-time-only "00:00:00.845"))
+    (is (not (spec/valid? ::p/utc-time-only "99:99:99.999")))
+    (is (spec/valid? ::p/utc-time-only "15:22:10"))
+    (is (not (spec/valid? ::p/utc-time-only "15:22:100")))
+    (is (not (spec/valid? ::p/utc-time-only "something totally different")))
+    (is (not (spec/valid? ::p/utc-time-only "15:22:10.-1")))
+    (is (not (spec/valid? ::p/utc-time-only "60:00:10.783")))
+    (is (spec/valid? ::p/utc-time-only "23:59:59.000"))
+    (is (not (spec/valid? ::p/utc-time-only "22:10.845")))
+    (is (not (spec/valid? ::p/utc-time-only "15:22:10.sss")))))
+
+(deftest utc-date-only-test
+  (testing "spec for UTC date-only data type is correctly defined"
+    (is (spec/valid? ::p/utc-date-only "20090101"))
+    (is (spec/valid? ::p/utc-date-only "00000101"))
+    (is (spec/valid? ::p/utc-date-only "99991231"))
+    (is (not (spec/valid? ::p/utc-date-only "20100001")))
+    (is (not (spec/valid? ::p/utc-date-only "20100100")))
+    (is (not (spec/valid? ::p/utc-date-only "20100132")))))
 
 (deftest tz-time-only-test
   (testing "spec for TZ-time-only data type is correctly defined"
@@ -33,6 +56,17 @@
     (is (not (spec/valid? ::p/tz-time-only "99:09+05")))
     (is (spec/valid? ::p/tz-time-only "00:00+00"))
     (is (not (spec/valid? ::p/tz-time-only "10:10-")))))
+
+(deftest tz-timestamp-test
+  (testing "spec for TZ-timestamp data type is correctly defined"
+    (is (spec/valid? ::p/tz-timestamp "20060901-07:39Z"))
+    (is (spec/valid? ::p/tz-timestamp "20060901-02:39-05"))
+    (is (spec/valid? ::p/tz-timestamp "20060901-15:39+08"))
+    (is (spec/valid? ::p/tz-timestamp "20060901-13:09+05:30"))
+    (is (not (spec/valid? ::p/tz-timestamp "13:09+05:99")))
+    (is (not (spec/valid? ::p/tz-timestamp "99:09+05")))
+    (is (spec/valid? ::p/tz-timestamp "20060901-00:00+01"))
+    (is (not (spec/valid? ::p/tz-timestamp "10:10-")))))
 
 (deftest local-mkt-date-test
   (testing "spec for local-mkt-date data type is correctly defined"
@@ -60,7 +94,6 @@
     (is (not (spec/valid? ::p/month-year "00000000")))
     (is (not (spec/valid? ::p/month-year "000000")))))
 
-
 (deftest qty-datatype-test
   (testing "spec for 'qty' data type is correctly defined"
     (is (spec/valid? ::p/qty 34))
@@ -69,7 +102,6 @@
     (is (spec/valid? ::p/qty 2453.0))
     (is (spec/valid? ::p/qty 10.0))
     (is (not (spec/valid? ::p/qty 1/2)))))
-
 
 (deftest multiple-char-value-test
   (testing "spec for multiple-char-value is correctly defined"
@@ -80,11 +112,30 @@
     (is (not (spec/valid? ::p/multiple-char-value " ")))
     (is (not (spec/valid? ::p/multiple-char-value "ab")))
     (is (not (spec/valid? ::p/multiple-char-value "tt f r d")))
-    (is (not (spec/valid? ::p/multiple-char-value "1 2 3")))))
+    (is (spec/valid? ::p/multiple-char-value "1 2 3"))
+    (is (spec/valid? ::p/multiple-char-value ". . ."))
+    (is (spec/valid? ::p/multiple-char-value "{ } Z 2"))
+    (is (not (spec/valid? ::p/multiple-char-value "..")))))
 
-(utc-timestamp-regex-test) ;TODO remove
+(deftest multiple-string-value-test
+  (testing "spec for multiple-string-value is correctly defined"
+    (is (spec/valid? ::p/multiple-string-value "j d t d O C X y"))
+    (is (spec/valid? ::p/multiple-string-value "z"))
+    (is (spec/valid? ::p/multiple-string-value "a b c"))
+    (is (spec/valid? ::p/multiple-string-value "j d t d O C XU"))
+    (is (not (spec/valid? ::p/multiple-string-value " ")))
+    (is (spec/valid? ::p/multiple-string-value "ab"))
+    (is (spec/valid? ::p/multiple-string-value "tt f r d"))
+    (is (spec/valid? ::p/multiple-string-value "1 2 3"))
+    (is (spec/valid? ::p/multiple-string-value "aa//bh ZH;:[[ZH6 ss"))))
+
+(utc-timestamp-test) ;TODO remove
+(utc-time-only-test) ;TODO remove
+(utc-date-only-test) ;TODO remove
 (qty-datatype-test) ;TODO remove
 (tz-time-only-test) ;TODO remove
+(tz-timestamp-test) ;TODO remove
 (local-mkt-date-test) ;TODO remove
 (month-year-date-test) ;TODO remove
 (multiple-char-value-test) ;TODO remove
+(multiple-string-value-test) ;TODO remove

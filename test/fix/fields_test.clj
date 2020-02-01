@@ -16,6 +16,9 @@
     (is (not (spec/valid? ::fs/field [:1450 {:blah 111}])))
     (is (not (spec/valid? ::fs/field [:1450 :something])))
     (is (not (spec/valid? ::fs/field [:1450 "SD" "SD"])))
-    ))
+    (is (spec/valid? ::fs/field [:862 62]))
+    (is (spec/valid? ::fs/field [:277 "4 3"]))
+    (is (spec/valid? ::fs/field [:277 "w T d z AH"]))
+    (is (not (spec/valid? ::fs/field [:277 "Ah"])))))
 
 (fields-spec-test) ;TODO remove

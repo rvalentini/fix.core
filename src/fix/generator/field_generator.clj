@@ -21,8 +21,8 @@
 (defn- build-field-map [fields]
   (let [field-entries (map
                         (fn [field]
-                          (let [name (get-in field [:attrs :name]) ;;TODO get possible INT values (=enum) from content for some fields
-                                type (keyword (get-in field [:attrs :type])) ;;TODO e.g. [{:tag :value, :attrs {:description NERC_EASTERN_OFF_PEAK, :enum 0}, :content nil}
+                          (let [name (get-in field [:attrs :name])
+                                type (keyword (get-in field [:attrs :type]))
                                 number (keyword (get-in field [:attrs :number]))
                                 enums (extract-enums (get-in field [:content]))
                                 result {number {:name name :type type}}]

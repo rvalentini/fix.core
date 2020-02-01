@@ -12,8 +12,7 @@
 
 (-main)
 ;;TODO NEXT:
-;;TODO (1) Define all possible field types as Spec
-;;TODO (2) remove deprecated spec ns
+;;TODO (1) remove deprecated spec ns
 
 
 

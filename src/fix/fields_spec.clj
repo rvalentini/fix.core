@@ -1,5 +1,6 @@
 (ns fix.fields-spec
   (:require [clojure.spec.alpha :as spec]
+            [clojure.string :as string]
             [fix.fields :as f]
             [fix.primitives :as p]))
 
@@ -32,14 +33,26 @@
    :COUNTRY ::p/country
    :MONTHYEAR ::p/month-year
    :MULTIPLECHARVALUE ::p/multiple-char-value
-   })
-
-;TODO extends mapping raw data -> primitive spec types
+   :MULTIPLESTRINGVALUE ::p/multiple-string-value
+   :XMLDATA ::p/xml-data
+   :UTCTIMEONLY ::p/utc-time-only
+   :UTCDATEONLY ::p/utc-date-only
+   :TZTIMESTAMP ::p/tz-timestamp})
 
 (defn raw->spec [raw-data-type]
   (if raw-data-type
     (raw-data-type type-specs)))
 
+(defn contains-repeated? [type]
+  (or (= type ::p/multiple-string-value)
+      (= type ::p/multiple-char-value)))
+
+(defn is-valid-enum? [type values enums]
+  (if (contains-repeated? type)
+    (let [enums-as-set (set (map #(key %) enums))
+          values-as-seq (string/split values #" ")]
+      (every? #(contains? enums-as-set %) values-as-seq))
+    (contains? enums values)))
 
 (defn field? [arg]
   (let [[tag value] arg
@@ -47,8 +60,9 @@
         type (raw->spec (:type field-attr))]
     (if (some? field-attr)
       (if-let [enums (:values field-attr)]
-        (and (contains? enums value)
-             (spec/valid? type value))
+        (and
+          (spec/valid? type value)
+          (is-valid-enum? type value enums))
         (spec/valid? type value)))))
 
 (spec/def ::field (spec/and key-value? field?))
