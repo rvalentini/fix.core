@@ -1,0 +1,6 @@
+{:tag :component, :attrs {:name LinesOfTextGrp},
+ :content [{:tag :group,
+            :attrs {:required Y, :name NoLinesOfText},
+            :content [{:tag :field, :attrs {:required Y, :name Text}, :content nil}
+                      {:tag :field, :attrs {:required N, :name EncodedTextLen}, :content nil}
+                      {:tag :field, :attrs {:required N, :name EncodedText}, :content nil}]}]}

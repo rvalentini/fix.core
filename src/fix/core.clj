@@ -1,13 +1,15 @@
 (ns fix.core
   (:gen-class)
   (:require [fix.parser.xml-parser :as parser]
-            [fix.generator.field-generator :as generator]))
+            [fix.generator.field-generator :as field-generator]
+            [fix.generator.component-generator :as component-generator]))
 
 (defn -main
   [& args]
-  (println "Hello, World!")
-  (let [fields (parser/parse "resources/FIX50SP2.xml")]
-    (generator/generate-source-file fields)))
+  (println "Generating FIX5.0 SP2 sources ... !")
+  (let [[fields components] (parser/parse "resources/FIX50SP2.xml")]
+    (field-generator/generate-source-file fields)
+    (component-generator/generate-source-file components)))
 
 
 (-main)
@@ -27,8 +29,14 @@
                           {:8 "C" :4 "D"}
                           {:8 "E" :4 "F"}]}})
 
+; component :content :attrs -> always "No..." of type NUMINGROUP == first field in group
+; component :content :content is array of all repeated fields -> multiple of NUMINGROUP
 
+; message > component > group -> group never directly part of message
 
+; components and fields can have the same name "DerivativeSecurityXML"
+
+; component definitions don't have "required" within top-level attrs -> only the usages have
 
 
 
