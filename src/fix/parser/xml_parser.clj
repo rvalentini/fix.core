@@ -21,4 +21,4 @@
       (println component)) ;TODO remove
     #_(doseq [field fields]
       (println field)) ;TODO remove
-    [fields componentps]))
+    [fields components]))

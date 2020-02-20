@@ -1,6 +1,43 @@
-{:tag :component, :attrs {:name LinesOfTextGrp},
- :content [{:tag :group,
-            :attrs {:required Y, :name NoLinesOfText},
+{:tag     :component, :attrs {:name LinesOfTextGrp},
+ :content [{:tag     :group,
+            :attrs   {:required Y, :name NoLinesOfText},
             :content [{:tag :field, :attrs {:required Y, :name Text}, :content nil}
                       {:tag :field, :attrs {:required N, :name EncodedTextLen}, :content nil}
                       {:tag :field, :attrs {:required N, :name EncodedText}, :content nil}]}]}
+
+
+{:tag :component,
+ :attrs {:name QuotEntryAckGrp},
+ :content [{:tag :group,
+            :attrs {:required N, :name NoQuoteEntries},     ;TODO WARNING! This NoQuoteEntries must be encoded as separate tag -> 295
+            :content [{:tag :field, :attrs {:required N, :name QuoteEntryID}, :content nil}
+                      {:tag :component, :attrs {:required N, :name Instrument}, :content nil}
+                      {:tag :component, :attrs {:required N, :name InstrmtLegGrp}, :content nil}
+                      {:tag :field, :attrs {:required N, :name BidPx}, :content nil}
+                      {:tag :field, :attrs {:required N, :name OfferPx}, :content nil}
+                      {:tag :field, :attrs {:required N, :name BidSize}, :content nil}
+                      {:tag :field, :attrs {:required N, :name OfferSize}, :content nil}
+                      {:tag :field, :attrs {:required N, :name ValidUntilTime}, :content nil}
+                      {:tag :field, :attrs {:required N, :name BidSpotRate}, :content nil}
+                      {:tag :field, :attrs {:required N, :name OfferSpotRate}, :content nil}
+                      {:tag :field, :attrs {:required N, :name BidForwardPoints}, :content nil}
+                      {:tag :field, :attrs {:required N, :name OfferForwardPoints}, :content nil}
+                      {:tag :field, :attrs {:required N, :name MidPx}, :content nil}
+                      {:tag :field, :attrs {:required N, :name BidYield}, :content nil}
+                      {:tag :field, :attrs {:required N, :name MidYield}, :content nil}
+                      {:tag :field, :attrs {:required N, :name OfferYield}, :content nil}
+                      {:tag :field, :attrs {:required N, :name TransactTime}, :content nil}
+                      {:tag :field, :attrs {:required N, :name TradingSessionID}, :content nil}
+                      {:tag :field, :attrs {:required N, :name TradingSessionSubID}, :content nil}
+                      {:tag :field, :attrs {:required N, :name SettlDate}, :content nil}
+                      {:tag :field, :attrs {:required N, :name OrdType}, :content nil}
+                      {:tag :field, :attrs {:required N, :name SettlDate2}, :content nil}
+                      {:tag :field, :attrs {:required N, :name OrderQty2}, :content nil}
+                      {:tag :field, :attrs {:required N, :name BidForwardPoints2}, :content nil}
+                      {:tag :field, :attrs {:required N, :name OfferForwardPoints2}, :content nil}
+                      {:tag :field, :attrs {:required N, :name Currency}, :content nil}
+                      {:tag :field, :attrs {:required N, :name QuoteEntryStatus}, :content nil}
+                      {:tag :field, :attrs {:required N, :name QuoteEntryRejectReason}, :content nil}
+                      {:tag :field, :attrs {:required N, :name BookingType}, :content nil}
+                      {:tag :field, :attrs {:required N, :name OrderCapacity}, :content nil}
+                      {:tag :field, :attrs {:required N, :name OrderRestrictions}, :content nil}]}]}
