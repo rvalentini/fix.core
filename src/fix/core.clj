@@ -20,14 +20,14 @@
 ;;TODO when the order is needed (e.g. Header/Trailer, repeating groups)
 ;;TODO (3) how to handle repeating tags in hashmap? -> sub-maps repeating group as vec of maps
 
-(def message {:order [:345 :54 :9 :11]  ;keep ordering of tags in array
+(def message {:ordering [:345 :54 :9 :11]  ;keep ordering of tags in array
               :data {:345 "some_stuff"
                      :54  "some_other_stuff"
                      :9   "Fred"
                      :10 3
-                     :11 [{:8 "A" :4 "B"} ;;TODO could be repeating group --- does TAG ":11" exist for this context?
-                          {:8 "C" :4 "D"}
-                          {:8 "E" :4 "F"}]}})
+                     :10-groups [{:8 "A" :4 "B"} ;;TODO could be repeating group --- does TAG ":11" exist for this context? maybe introcude :11-groups []
+                                 {:8 "C" :4 "D"}
+                                 {:8 "E" :4 "F"}]}})
 
 ; component :content :attrs -> always "No..." of type NUMINGROUP == first field in group
 ; component :content :content is array of all repeated fields -> multiple of NUMINGROUP

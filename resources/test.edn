@@ -1,10 +1,16 @@
-{:tag     :component, :attrs {:name LinesOfTextGrp},
+{:tag     :component,
+ :attrs {:name LinesOfTextGrp},
  :content [{:tag     :group,
             :attrs   {:required Y, :name NoLinesOfText},
             :content [{:tag :field, :attrs {:required Y, :name Text}, :content nil}
                       {:tag :field, :attrs {:required N, :name EncodedTextLen}, :content nil}
                       {:tag :field, :attrs {:required N, :name EncodedText}, :content nil}]}]}
 
+
+; :content can be one or more of
+; (1) group
+; (2) field
+; (3) component
 
 {:tag :component,
  :attrs {:name QuotEntryAckGrp},
@@ -41,3 +47,18 @@
                       {:tag :field, :attrs {:required N, :name BookingType}, :content nil}
                       {:tag :field, :attrs {:required N, :name OrderCapacity}, :content nil}
                       {:tag :field, :attrs {:required N, :name OrderRestrictions}, :content nil}]}]}
+
+{:tag :component,
+ :attrs {:name PegInstructions},
+ :content [{:tag :field, :attrs {:required N, :name PegOffsetValue}, :content nil}
+           {:tag :field, :attrs {:required N, :name PegPriceType}, :content nil}
+           {:tag :field, :attrs {:required N, :name PegMoveType}, :content nil}
+           {:tag :field, :attrs {:required N, :name PegOffsetType}, :content nil}
+           {:tag :field, :attrs {:required N, :name PegLimitType}, :content nil}
+           {:tag :field, :attrs {:required N, :name PegRoundDirection}, :content nil}
+           {:tag :field, :attrs {:required N, :name PegScope}, :content nil}
+           {:tag :field, :attrs {:required N, :name PegSecurityIDSource}, :content nil}
+           {:tag :field, :attrs {:required N, :name PegSecurityID}, :content nil}
+           {:tag :field, :attrs {:required N, :name PegSymbol}, :content nil}
+           {:tag :field, :attrs {:required N, :name PegSecurityDesc}, :content nil}]}
+

@@ -18,7 +18,7 @@
         messages (filter (comp #{:message} :tag) seq)  ;TODO use
         components (extract-components seq)]
     (doseq [component components]
-      (println component)) ;TODO remove
+      #_(println component)) ;TODO remove
     #_(doseq [field fields]
       (println field)) ;TODO remove
     [fields components]))
