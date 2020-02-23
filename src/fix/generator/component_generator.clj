@@ -1,12 +1,13 @@
 (ns fix.generator.component-generator
-  (:require [fix.fields :as f])
+  (:require [fix.fields :as f]
+            [clojure.pprint :refer [pprint]])
   (:import (java.util NoSuchElementException)))
 
 ;TODO better make this part of fields ns?
 (defn- get-field-tag-for-name [field-name]
   (let [matches (->> f/fields
-                 (filter (fn [[_ v]] (= (:name v) field-name)))
-                 (map first))]
+                     (filter (fn [[_ v]] (= (:name v) field-name)))
+                     (map first))]
     (if (nil? matches)
       (throw (NoSuchElementException. (str "Field " field-name " does not exist!")))
       (first matches))))
@@ -43,14 +44,8 @@
   (case char
     "N" false
     "Y" true
-    "default" (throw (IllegalArgumentException. (str "Given char is neither 'N' nor 'Y': " char)))))
+    (throw (IllegalArgumentException. (str "Given char is neither 'N' nor 'Y': " char)))))
 
-(defn- build-component [component-attrs component-content all-components]
-  (assert-empty-content component-content)
-  (println "Found nested component:")
-  (println (str (get-component-by-name all-components (:name component-attrs))))
-
-  )
 
 (defn- build-field [field-attrs field-content]
   (assert-empty-content field-content)
@@ -58,21 +53,25 @@
         required (char->boolean (:required field-attrs))]
     {field-tag {:required required}}))
 
-;TODO SOLUTION: call this function recursively with content vectors for :group and :component
-;TODO SOLUTION: break condition for recursion is :field
-;TODO SOLUTION: group must be encoded as {:44 {:required false} :44-group {...}}
+
 ;TODO SOLUTION: ordering should be persisted next to content -> "two aggregators"
-;TODO SOLUTION: component must be encoded as {:nameOfComponent-block {...}
-(defn- extract-content [content-vec all-components]
-  (println "------------- NEW COMPONENT ----------------")
-  (doseq [elem content-vec]
-    (case (:tag elem)
-      :field (println (build-field (:attrs elem) (:content elem)))
-      :component (build-component (:attrs elem) (:content elem) all-components )
-      :group ()                       ;TODO implement
-      "default" (throw (IllegalArgumentException. (str "Wrong input: component contains unknown tag: " (:tag elem))))
-      )
-    )
+(defn- build-component [content all-components]
+  (->> content
+       (map (fn [elem]
+              (let [attrs (:attrs elem)
+                    elem-type (:tag elem)
+                    elem-name (:name attrs)
+                    elem-content (:content elem)
+                    elem-tag (get-field-tag-for-name (:name attrs))]
+                (case elem-type
+                  :field (build-field attrs elem-content)
+                  :component {(keyword (str elem-name "-block"))
+                              (build-component (:content (get-component-by-name all-components elem-name)) all-components)}
+                  :group {(keyword elem-tag)                         {:required (char->boolean (:required attrs))}
+                          (keyword (subs (str elem-tag "-group") 1)) (build-component elem-content all-components)}
+                  (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type: " elem-type)))))))
+       (reduce merge {}))
+
   )
 
 (defn generate-source-file [components]
@@ -80,13 +79,23 @@
   (let [component-entries (map
                             (fn [component]
                               (assert-component component)
-                              #_(println component)
+                              (println " ----------------------- NEW COMPONENT --------------------")
                               (let [name (get-in component [:attrs :name])
-                                    content (extract-content (:content component) components)])
+                                    content (build-component (:content component) components)]
+                                (println (str "Length: " (count content)))
+                                (pprint content)
+                                #_(println "Afer execution: " content)
+                                #_(println (pr-str "After extraction: " content))
+                                content)
                               )
                             components)]
-    (reduce merge {} component-entries)
-    )
+    #_(doall component-entries)
+    (doall component-entries)
+    (println "After completion: ")
+    (doseq [comp component-entries]
+      #_(println (str "COMP: " comp))
+      )
+    #_(reduce merge {} component-entries))
 
   ;TODO create component structure as described in core.clj
   ;TODO write to file
