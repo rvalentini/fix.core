@@ -49,10 +49,25 @@
 
 (defn- build-field [field-attrs field-content]
   (assert-empty-content field-content)
-  (let [field-tag (get-field-tag-for-name (:name field-attrs))
+  (let [field-tag (get-field-tag-for-name (:name field-attrs)) ;TODO optimized method call
         required (char->boolean (:required field-attrs))]
     {field-tag {:required required}}))
 
+;TODO combine ordering with build-component
+;TODO make ordering structure more coherent
+(defn- extract-ordering [content all-components]
+  (->> content
+       (map (fn [elem]
+              (let [attrs (:attrs elem)
+                    elem-type (:tag elem)
+                    elem-name (:name attrs)
+                    elem-content (:content elem)
+                    elem-tag (get-field-tag-for-name (:name attrs))]
+                (case elem-type
+                  :field elem-tag
+                  :component (extract-ordering (:content (get-component-by-name all-components elem-name)) all-components)
+                  :group [(keyword elem-tag) (extract-ordering elem-content all-components)]
+                  (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type: " elem-type)))))))))
 
 ;TODO SOLUTION: ordering should be persisted next to content -> "two aggregators"
 (defn- build-component [content all-components]
@@ -70,9 +85,8 @@
                   :group {(keyword elem-tag)                         {:required (char->boolean (:required attrs))}
                           (keyword (subs (str elem-tag "-group") 1)) (build-component elem-content all-components)}
                   (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type: " elem-type)))))))
-       (reduce merge {}))
+       (reduce merge {})))
 
-  )
 
 (defn generate-source-file [components]
   (println (str "Number of components received: " (count components)))
@@ -81,9 +95,10 @@
                               (assert-component component)
                               (println " ----------------------- NEW COMPONENT --------------------")
                               (let [name (get-in component [:attrs :name])
-                                    content (build-component (:content component) components)]
+                                    content (build-component (:content component) components)
+                                    ordering (extract-ordering (:content component) components)]
                                 (println (str "Length: " (count content)))
-                                (pprint content)
+                                (pprint ordering)
                                 #_(println "Afer execution: " content)
                                 #_(println (pr-str "After extraction: " content))
                                 content)
