@@ -53,8 +53,13 @@
         required (char->boolean (:required field-attrs))]
     {field-tag {:required required}}))
 
+
+(defn- flatten-vec-of-vec [arg]
+  (if (and (sequential? arg) (= (count arg) 1))
+    (first arg)
+    (vec arg)))
+
 ;TODO combine ordering with build-component
-;TODO make ordering structure more coherent
 (defn- extract-ordering [content all-components]
   (->> content
        (map (fn [elem]
@@ -67,7 +72,8 @@
                   :field elem-tag
                   :component (extract-ordering (:content (get-component-by-name all-components elem-name)) all-components)
                   :group [(keyword elem-tag) (extract-ordering elem-content all-components)]
-                  (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type: " elem-type)))))))))
+                  (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type: " elem-type)))))))
+       flatten-vec-of-vec))
 
 ;TODO SOLUTION: ordering should be persisted next to content -> "two aggregators"
 (defn- build-component [content all-components]
@@ -97,7 +103,7 @@
                               (let [name (get-in component [:attrs :name])
                                     content (build-component (:content component) components)
                                     ordering (extract-ordering (:content component) components)]
-                                (println (str "Length: " (count content)))
+                                (println (str "Name: " name " and Length: " (count content)))
                                 (pprint ordering)
                                 #_(println "Afer execution: " content)
                                 #_(println (pr-str "After extraction: " content))
