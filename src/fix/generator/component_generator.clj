@@ -1,9 +1,11 @@
 (ns fix.generator.component-generator
   (:require [fix.definitions.fields :as f]
-            [clojure.pprint :refer [pprint]])
+            [clojure.pprint :refer [pprint]]
+            [fix.parser.xml-parser :as parser])
   (:import (java.util NoSuchElementException)))
 
-(defn- get-field-tag-for-name [field-name]
+
+(defn- get-field-tag-by-name [field-name]
   (let [matches (->> f/fields
                      (filter (fn [[_ v]] (= (:name v) field-name)))
                      (map first))]
@@ -38,20 +40,17 @@
     "Y" true
     (throw (IllegalArgumentException. (str "Given char is neither 'N' nor 'Y': " char)))))
 
-
 (defn- build-field [field-attrs field-content]
   (assert-empty-content field-content)
-  (let [field-tag (get-field-tag-for-name (:name field-attrs)) ;TODO optimized method call
+  (let [field-tag (get-field-tag-by-name (:name field-attrs))
         required (char->boolean (:required field-attrs))]
     {field-tag {:required required}}))
-
 
 (defn- flatten-vec-of-vec [arg]
   (if (and (sequential? arg) (= (count arg) 1))
     (first arg)
     (vec arg)))
 
-;TODO combine ordering with build-component
 (defn- extract-ordering [content all-components]
   (->> content
        (map (fn [elem]
@@ -59,7 +58,7 @@
                     elem-type (:tag elem)
                     elem-name (:name attrs)
                     elem-content (:content elem)
-                    elem-tag (get-field-tag-for-name (:name attrs))]
+                    elem-tag (get-field-tag-by-name (:name attrs))]
                 (case elem-type
                   :field elem-tag
                   :component (extract-ordering (:content (get-component-by-name all-components elem-name)) all-components)
@@ -67,38 +66,41 @@
                   (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type: " elem-type)))))))
        flatten-vec-of-vec))
 
-;TODO SOLUTION: ordering should be persisted next to content -> "two aggregators"
-(defn- build-component [content all-components]
+(defn- extract-definitions [content all-components]
   (->> content
        (map (fn [elem]
               (let [attrs (:attrs elem)
                     elem-type (:tag elem)
                     elem-name (:name attrs)
                     elem-content (:content elem)
-                    elem-tag (get-field-tag-for-name (:name attrs))]
+                    elem-tag (get-field-tag-by-name (:name attrs))]
                 (case elem-type
                   :field (build-field attrs elem-content)
                   :component {(keyword (str elem-name "-block"))
-                              (build-component (:content (get-component-by-name all-components elem-name)) all-components)}
+                              (extract-definitions (:content (get-component-by-name all-components elem-name)) all-components)}
                   :group {(keyword elem-tag)                         {:required (char->boolean (:required attrs))}
-                          (keyword (subs (str elem-tag "-group") 1)) (build-component elem-content all-components)}
+                          (keyword (subs (str elem-tag "-group") 1)) (extract-definitions elem-content all-components)}
                   (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type: " elem-type)))))))
        (reduce merge {})))
 
 
-(defn generate-source-file [components]
+(defn- generate-source-file [components]
   (println (str "Number of components received: " (count components)))
-  (let [component-entries (map
+  (let [gen-components (map
                             (fn [component]
                               (assert-component component)
-                              (println " ----------------------- NEW COMPONENT --------------------")
+                              (println " ------------------ NEW COMPONENT ------------------")
                               (let [name (get-in component [:attrs :name])
-                                    definitions (build-component (:content component) components)
+                                    definitions (extract-definitions (:content component) components)
                                     ordering (extract-ordering (:content component) components)]
                                 (println (str "Name: " name " and Length: " (count definitions)))
                                 (pprint ordering)
                                 {(keyword name) {:ordering ordering
                                                  :definitions definitions}}))
                             components)]
-    (spit-to-file (apply merge component-entries))))
+    (spit-to-file (apply merge gen-components))))
 
+(defn -main [& _]
+  (println "Generating FIX5.0 SP2 COMPONENT sources ... !")
+  (let [[_ components] (parser/parse "resources/FIX50SP2.xml")]
+    (generate-source-file components)))

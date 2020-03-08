@@ -2,6 +2,9 @@
 
 FIXME: description
 
+TODO:
+* Add description for `lein gen` -> code generation necessary when no definitions present
+
 ## Installation
 
 Download from http://example.com/FIXME.

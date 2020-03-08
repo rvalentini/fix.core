@@ -6,4 +6,9 @@
   :dependencies [[org.clojure/clojure "1.10.0"]]
   :main ^:skip-aot fix.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:uberjar {:aot :all}
+             :gen-fields     {:main ^:skip-aot fix.generator.field-generator}
+             :gen-components {:main ^:skip-aot fix.generator.component-generator}}
+  :aliases {"gen-fields" ["with-profile" "gen-fields" "run"]
+            "gen-components" ["with-profile" "gen-components" "run"]
+            "gen" ["do" "gen-fields," "gen-components"]})

@@ -1,5 +1,5 @@
-(ns fix.generator.field-generator)
-
+(ns fix.generator.field-generator
+  (:require [fix.parser.xml-parser :as parser]))
 
 (defn- spit-to-file [field-map]
   (let [header '(ns fix.definitions.fields)
@@ -7,7 +7,6 @@
     (spit "src/fix/definitions/fields.clj" header)
     (spit "src/fix/definitions/fields.clj" "\n\n" :append true)
     (spit "src/fix/definitions/fields.clj" var :append true)))
-
 
 (defn- extract-enums [value-tags]
   (let [result (map
@@ -17,9 +16,8 @@
                  value-tags)]
     (reduce merge {} result)))
 
-
-(defn- build-field-map [fields]
-  (let [field-entries (map
+(defn- extract-definitions [fields]
+  (let [gen-fields (map
                         (fn [field]
                           (let [name (get-in field [:attrs :name])
                                 type (keyword (get-in field [:attrs :type]))
@@ -30,13 +28,16 @@
                               (assoc-in result [number :values] enums)
                               result)))
                         fields)]
-    (reduce merge {} field-entries)))
+    (reduce merge {} gen-fields)))
 
-
-(defn generate-source-file [fields]
+(defn- generate-source-file [fields]
   (spit-to-file
-    (build-field-map fields)))
+    (extract-definitions fields)))
 
+(defn -main [& _]
+  (println "Generating FIX5.0 SP2 FIELD sources ... !")
+  (let [[fields _] (parser/parse "resources/FIX50SP2.xml")]
+    (generate-source-file fields)))
 
 
 

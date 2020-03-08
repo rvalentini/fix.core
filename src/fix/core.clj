@@ -1,18 +1,7 @@
 (ns fix.core
-  (:gen-class)
-  (:require [fix.parser.xml-parser :as parser]
-            [fix.generator.field-generator :as field-generator]
-            [fix.generator.component-generator :as component-generator]))
-
-(defn -main
-  [& args]
-  (println "Generating FIX5.0 SP2 sources ... !")
-  (let [[fields components] (parser/parse "resources/FIX50SP2.xml")]
-    (field-generator/generate-source-file fields)
-    (component-generator/generate-source-file components)))
+  (:gen-class))
 
 
-(-main)
 ;;TODO NEXT:
 ;;TODO (1) remove deprecated spec ns
 
