@@ -31,6 +31,11 @@
 ;TODO can groups contain other groups ??? -> otherwise "recur" in components when 2nd level component appears
 
 
+;TODO for messages:
+;TODO (1) FIXT 11 -> messages "admin" are not yet included in 5.0 SP2
+;TODO (2) FIXT 11 -> header and trailer components need to be extracted
+;TODO (3) FIXT 11 -> components and fields should all be already included
+
 
 
 
