@@ -1,9 +1,8 @@
 (ns fix.generator.component-generator
-  (:require [fix.fields :as f]
+  (:require [fix.definitions.fields :as f]
             [clojure.pprint :refer [pprint]])
   (:import (java.util NoSuchElementException)))
 
-;TODO better make this part of fields ns?
 (defn- get-field-tag-for-name [field-name]
   (let [matches (->> f/fields
                      (filter (fn [[_ v]] (= (:name v) field-name)))
@@ -18,27 +17,20 @@
       (throw (NoSuchElementException. (str "Component " name " does not exist!")))
       (first matches))))
 
-
-
-;TODO make use of :pre
 (defn- assert-component [component]
-  (when (not= (:tag component) :component)
-    (throw (IllegalArgumentException. "Wrong input: called component generator with non-component data!")))
+  {:pre [(= (:tag component) :component)]}
   component)
 
-;TODO make use of :pre
 (defn- assert-empty-content [content]
-  (when (seq content)
-    (throw (AssertionError. (str "Field content should always be empty inside components! Instead found: " content))))
+  {:pre [(empty? content)]}
   content)
 
-
 (defn- spit-to-file [component-map]
-  (let [header '(ns fix.components)
+  (let [header '(ns fix.definitions.components)
         var `(def ~'components ~component-map)]
-    (spit "src/fix/components.clj" header)
-    (spit "src/fix/components.clj" "\n\n" :append true)
-    (spit "src/fix/components.clj" var :append true)))
+    (spit "src/fix/definitions/components.clj" header)
+    (spit "src/fix/definitions/components.clj" "\n\n" :append true)
+    (spit "src/fix/definitions/components.clj" var :append true)))
 
 (defn- char->boolean [char]
   (case char
@@ -101,23 +93,12 @@
                               (assert-component component)
                               (println " ----------------------- NEW COMPONENT --------------------")
                               (let [name (get-in component [:attrs :name])
-                                    content (build-component (:content component) components)
+                                    definitions (build-component (:content component) components)
                                     ordering (extract-ordering (:content component) components)]
-                                (println (str "Name: " name " and Length: " (count content)))
+                                (println (str "Name: " name " and Length: " (count definitions)))
                                 (pprint ordering)
-                                #_(println "Afer execution: " content)
-                                #_(println (pr-str "After extraction: " content))
-                                content)
-                              )
+                                {(keyword name) {:ordering ordering
+                                                 :definitions definitions}}))
                             components)]
-    #_(doall component-entries)
-    (doall component-entries)
-    (println "After completion: ")
-    (doseq [comp component-entries]
-      #_(println (str "COMP: " comp))
-      )
-    #_(reduce merge {} component-entries))
+    (spit-to-file (apply merge component-entries))))
 
-  ;TODO create component structure as described in core.clj
-  ;TODO write to file
-  )

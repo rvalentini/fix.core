@@ -2,11 +2,11 @@
 
 
 (defn- spit-to-file [field-map]
-  (let [header '(ns fix.fields)
+  (let [header '(ns fix.definitions.fields)
         var `(def ~'fields ~field-map)]
-    (spit "src/fix/fields.clj" header)
-    (spit "src/fix/fields.clj" "\n\n" :append true)
-    (spit "src/fix/fields.clj" var :append true)))
+    (spit "src/fix/definitions/fields.clj" header)
+    (spit "src/fix/definitions/fields.clj" "\n\n" :append true)
+    (spit "src/fix/definitions/fields.clj" var :append true)))
 
 
 (defn- extract-enums [value-tags]

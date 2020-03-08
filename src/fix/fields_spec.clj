@@ -1,7 +1,7 @@
 (ns fix.fields-spec
   (:require [clojure.spec.alpha :as spec]
             [clojure.string :as string]
-            [fix.fields :as f]
+            [fix.definitions.fields :as f]
             [fix.primitives :as p]))
 
 (defn key-value? [arg]
