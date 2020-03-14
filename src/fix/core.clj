@@ -34,6 +34,10 @@
 ;TODO for messages:
 ;TODO (1) FIXT 11 -> messages "admin" are not yet included in 5.0 SP2
 ;TODO (2) FIXT 11 -> header and trailer components need to be extracted
+
+;TODO Solution for 1 and 2: Added FIXT 11 Header, Trailer and messages to new file  FIXT50SP2_FIXT11_combined.xml
+;TODO this should just incorporate the existing messages into the existing parsing process
+
 ;TODO (3) FIXT 11 -> components and fields should all be already included
 
 
