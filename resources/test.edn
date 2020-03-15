@@ -331,3 +331,51 @@
        {:tag :field,
         :attrs {:required "N", :name "EncodedText"},
         :content nil}]}
+
+
+{:tag :message,
+ :attrs {:msgcat "app", :msgtype "CA", :name "OrderMassActionRequest"},
+ :content
+ [{:tag :field, :attrs {:required "Y", :name "ClOrdID"}, :content nil}
+  {:tag :field,
+   :attrs {:required "N", :name "SecondaryClOrdID"},
+   :content nil}
+  {:tag :field,
+   :attrs {:required "Y", :name "MassActionType"},
+   :content nil}
+  {:tag :field,
+   :attrs {:required "Y", :name "MassActionScope"},
+   :content nil}
+  {:tag :field, :attrs {:required "N", :name "MarketID"}, :content nil}
+  {:tag :field,
+   :attrs {:required "N", :name "MarketSegmentID"},
+   :content nil}
+  {:tag :field,
+   :attrs {:required "N", :name "TradingSessionID"},
+   :content nil}
+  {:tag :field,
+   :attrs {:required "N", :name "TradingSessionSubID"},
+   :content nil}
+  {:tag :component,
+   :attrs {:required "N", :name "Parties"},
+   :content nil}
+  {:tag :component,
+   :attrs {:required "N", :name "Instrument"},
+   :content nil}
+  {:tag :component,
+   :attrs {:required "N", :name "UnderlyingInstrument"},
+   :content nil}
+  {:tag :field, :attrs {:required "N", :name "Side"}, :content nil}
+  {:tag :field,
+   :attrs {:required "Y", :name "TransactTime"},
+   :content nil}
+  {:tag :field, :attrs {:required "N", :name "Text"}, :content nil}
+  {:tag :field,
+   :attrs {:required "N", :name "EncodedTextLen"},
+   :content nil}
+  {:tag :field,
+   :attrs {:required "N", :name "EncodedText"},
+   :content nil}
+  {:tag :component,
+   :attrs {:required "N", :name "TargetParties"},
+   :content nil}]}
