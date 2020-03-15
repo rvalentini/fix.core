@@ -20,7 +20,7 @@
     (spit "src/fix/definitions/messages.clj" "\n\n" :append true)
     (spit "src/fix/definitions/messages.clj" var :append true)))
 
-(defn- extract-definitions [content]
+(defn- extract-definition [content]
   (->> content
        (map (fn [elem]
               (let [attrs (:attrs elem)
@@ -53,11 +53,11 @@
                            (let [msg-cat  (get-in message [:attrs :msgcat])
                                  msg-type (get-in message [:attrs :msgtype])
                                  msg-name (get-in message [:attrs :name])
-                                 definitions (extract-definitions (:content message))
+                                 definition (extract-definition (:content message))
                                  ordering (extract-ordering (:content message))]
                              {(keyword msg-name) {:category msg-cat
                                                   :type msg-type
-                                                  :definitions definitions
+                                                  :definition definition
                                                   :ordering ordering}}))
                          messages)]
     (spit-to-file (apply merge gen-messages))))

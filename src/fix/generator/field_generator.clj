@@ -16,7 +16,7 @@
                  value-tags)]
     (reduce merge {} result)))
 
-(defn- extract-definitions [fields]
+(defn- extract-definition [fields]
   (println (str "Number of fields found: " (count fields)))
   (let [gen-fields (map
                         (fn [field]
@@ -33,7 +33,7 @@
 
 (defn- generate-source-file [fields]
   (spit-to-file
-    (extract-definitions fields)))
+    (extract-definition fields)))
 
 (defn -main [& _]
   (println "Generating FIX5.0 SP2 FIELD sources ... !")

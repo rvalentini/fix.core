@@ -12,6 +12,12 @@
     "Y" true
     (throw (IllegalArgumentException. (str "Given char is neither 'N' nor 'Y': " char)))))
 
+(defn get-component-by-name [components name]
+  (let [matches (filter #(= (get-in % [:attrs :name]) name) components)]
+    (if (nil? matches)
+      (throw (NoSuchElementException. (str "Component " name " does not exist!")))
+      (first matches))))
+
 (defn get-field-tag-by-name [field-name]
   (let [matches (->> f/fields
                      (filter (fn [[_ v]] (= (:name v) field-name)))
