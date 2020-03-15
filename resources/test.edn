@@ -307,3 +307,27 @@
 
 
 ([:1445 (:1446 :1447 :1448)])
+
+
+
+;;messages
+{:tag :message,
+ :attrs
+      {:msgcat "app", :msgtype "CE", :name "StreamAssignmentReportACK"},
+ :content
+      [{:tag :field,
+        :attrs {:required "Y", :name "StreamAsgnAckType"},
+        :content nil}
+       {:tag :field,
+        :attrs {:required "Y", :name "StreamAsgnRptID"},
+        :content nil}
+       {:tag :field,
+        :attrs {:required "N", :name "StreamAsgnRejReason"},
+        :content nil}
+       {:tag :field, :attrs {:required "N", :name "Text"}, :content nil}
+       {:tag :field,
+        :attrs {:required "N", :name "EncodedTextLen"},
+        :content nil}
+       {:tag :field,
+        :attrs {:required "N", :name "EncodedText"},
+        :content nil}]}

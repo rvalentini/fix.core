@@ -7,18 +7,19 @@
        (filter (comp #(contains? % :number) :attrs))))
 
 (defn- extract-components [seq]
-  (->> seq                                 ;count 174
+  (->> seq                                 ;count 176
        (filter (comp #{:component} :tag))
        (filter (comp #(not (contains? % :required)) :attrs))))
+
+(defn- extract-messages [seq]
+  (filter (comp #{:message} :tag) seq))  ;count 115
 
 (defn parse [file]
   (let [xml (xml/parse file)
         seq (xml-seq xml)
         fields (extract-fields seq)
-        messages (filter (comp #{:message} :tag) seq)  ;TODO use
-        components (extract-components seq)]
-    (doseq [component components]
-      #_(println component)) ;TODO remove
-    #_(doseq [field fields]
-      (println field)) ;TODO remove
-    [fields components]))
+        components (extract-components seq)
+        messages (extract-messages seq)]
+    [fields components messages]))
+
+

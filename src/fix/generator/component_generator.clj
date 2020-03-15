@@ -102,5 +102,5 @@
 
 (defn -main [& _]
   (println "Generating FIX5.0 SP2 COMPONENT sources ... !")
-  (let [[_ components] (parser/parse "resources/FIX50SP2_FIXT11_combined.xml")]
+  (let [[_ components _] (parser/parse "resources/FIX50SP2_FIXT11_combined.xml")]
     (generate-source-file components)))
