@@ -36,7 +36,7 @@
 
 (defn -main [& _]
   (println "Generating FIX5.0 SP2 FIELD sources ... !")
-  (let [[fields _] (parser/parse "resources/FIX50SP2.xml")]
+  (let [[fields _] (parser/parse "resources/FIX50SP2_FIXT11_combined.xml")]
     (generate-source-file fields)))
 
 
