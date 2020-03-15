@@ -44,12 +44,12 @@
                   :component (keyword elem-name)))))))
 
 (defn- generate-source-file [messages]
-  (println (str "Number of messages received: " (count messages)))
+  (println (str "Number of messages found: " (count messages)))
   (let [gen-messages (map
                          (fn [message]
                            (assert-message message)
-                           (println " ------------------ NEW MESSAGE ------------------")
-                           (pprint message)
+                           #_(println " ------------------ NEW MESSAGE ------------------")
+                           #_(pprint message)
                            (let [msg-cat  (get-in message [:attrs :msgcat])
                                  msg-type (get-in message [:attrs :msgtype])
                                  msg-name (get-in message [:attrs :name])
@@ -66,5 +66,3 @@
   (println "Generating FIX5.0 SP2 MESSAGE sources ... !")
   (let [[_ _ messages] (parser/parse "resources/FIX50SP2_FIXT11_combined.xml")]
     (generate-source-file messages)))
-
-(-main)

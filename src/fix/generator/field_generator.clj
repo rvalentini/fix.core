@@ -17,6 +17,7 @@
     (reduce merge {} result)))
 
 (defn- extract-definitions [fields]
+  (println (str "Number of fields found: " (count fields)))
   (let [gen-fields (map
                         (fn [field]
                           (let [name (get-in field [:attrs :name])

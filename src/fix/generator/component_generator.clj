@@ -85,16 +85,16 @@
 
 
 (defn- generate-source-file [components]
-  (println (str "Number of components received: " (count components)))
+  (println (str "Number of components found: " (count components)))
   (let [gen-components (map
                             (fn [component]
                               (assert-component component)
-                              (println " ------------------ NEW COMPONENT ------------------")
+                              #_(println " ------------------ NEW COMPONENT ------------------")
                               (let [name (get-in component [:attrs :name])
                                     definitions (extract-definitions (:content component) components)
                                     ordering (extract-ordering (:content component) components)]
-                                (println (str "Name: " name " and Length: " (count definitions)))
-                                (pprint ordering)
+                                #_(println (str "Name: " name " and Length: " (count definitions)))
+                                #_(pprint ordering)
                                 {(keyword name) {:ordering ordering
                                                  :definitions definitions}}))
                             components)]
