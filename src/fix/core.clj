@@ -31,14 +31,24 @@
 ;TODO can groups contain other groups ??? -> otherwise "recur" in components when 2nd level component appears
 
 
-;TODO for messages:
-;TODO (1) FIXT 11 -> messages "admin" are not yet included in 5.0 SP2
-;TODO (2) FIXT 11 -> header and trailer components need to be extracted
+;TODO spec for components:
 
-;TODO Solution for 1 and 2: Added FIXT 11 Header, Trailer and messages to new file  FIX50SP2_FIXT11_combined.xml
-;TODO this should just incorporate the existing messages into the existing parsing process
+;insights:
 
-;TODO (3) FIXT 11 -> components and fields should all be already included
+; FIX messages will be flat in the end
+; FIX message is a sequence of key value pairs
+
+(def parsed-fix [{:tag :345 :value "djcnjsdncjk"}
+                 {:tag :346 :value "djcnjsdncjk"}
+                 {:tag :347 :value "djcnjsdncjk"}
+                 {:tag :348 :value "djcnjsdncjk"}
+                 {:tag :349 :value "djcnjsdncjk"}
+                 {:tag :350 :value "djcnjsdncjk"}
+                 {:tag :351 :value "djcnjsdncjk"}
+                 {:tag :352 :value "djcnjsdncjk"}])
+
+
+
 
 
 

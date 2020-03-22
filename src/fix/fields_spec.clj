@@ -67,6 +67,7 @@
 
 (spec/def ::field (spec/and key-value? field?))
 
+;TODO change from [tag value] to {:tag tag :value value}
 
 
 
