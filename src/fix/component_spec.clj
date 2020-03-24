@@ -23,7 +23,6 @@
                               {:tag :844 :value 0}
                               {:tag :846 :value 1}])
 
-;TODO write some tests for this bad boy
 
 (defn matching-seqs? [given {:keys [definition] :as component}]
   (loop [seq-a given
@@ -31,7 +30,7 @@
     (println (str "Called with: " seq-a " and " seq-b))
     (cond
       (and (empty? seq-a) (empty? seq-b)) true
-      (or (empty? seq-a) (empty? seq-b)) false
+      (and (seq seq-a) (empty? seq-b)) false
       :else (let [[a & a-tail] seq-a
                   [b & b-tail] seq-b]
               (if (= a b)
@@ -43,8 +42,3 @@
 
 (spec/def ::component true)
 
-(matching-seqs? [:1 :3] {:ordering [:x :1 :2 :3]
-                          :definition {:x {:required true}
-                                       :1 {:required true}
-                                       :2 {:required false}
-                                       :3 {:required true}}})
