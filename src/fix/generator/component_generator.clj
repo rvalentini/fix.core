@@ -18,13 +18,18 @@
   (c/assert-empty-content field-content)
   (let [field-tag (c/get-field-tag-by-name (:name field-attrs))
         required (c/char->boolean (:required field-attrs))]
-    {field-tag {:required required}}))
+    {:tag field-tag
+     :required required
+     :type :field}))
 
 (defn- flatten-vec-of-vec [arg]
   (if (and (sequential? arg) (= (count arg) 1))
     (first arg)
     (vec arg)))
 
+
+;TODO rename ordering to content or similar
+;TODO check if "definition" can now be deleted completely
 (defn- extract-ordering [content all-components]
   (->> content
        (map (fn [elem]
@@ -34,12 +39,22 @@
                     elem-content (:content elem)
                     elem-tag (c/get-field-tag-by-name (:name attrs))]
                 (case elem-type
-                  :field elem-tag
-                  :component (extract-ordering (:content (c/get-component-by-name all-components elem-name)) all-components)
-                  :group [(keyword elem-tag) (extract-ordering elem-content all-components)]
+                  :field (build-field attrs elem-content)
+                  :component {:type     :component
+                              :required (c/char->boolean (:required attrs))
+                              :name     (keyword elem-name)
+                              :ordering [(extract-ordering (:content (c/get-component-by-name all-components elem-name)) all-components)]}
+                  :group  {:type :group
+                           :required (c/char->boolean (:required attrs))
+                           :name (keyword elem-name)
+                           :ordering [{:tag (keyword elem-tag)
+                                       :required (c/char->boolean (:required attrs))
+                                       :type :field}
+                                      (extract-ordering elem-content all-components)]}
                   (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type: " elem-type)))))))
        flatten-vec-of-vec))
 
+;TODO definition is now basically obsolete
 (defn- extract-definition [content all-components]
   (->> content
        (map (fn [elem]
@@ -50,7 +65,8 @@
                     elem-tag (c/get-field-tag-by-name (:name attrs))]
                 (case elem-type
                   :field (build-field attrs elem-content)
-                  :component {(keyword (str elem-name "-block"))
+                  :component {(keyword elem-name) {:required (c/char->boolean (:required attrs))}
+                              (keyword (str elem-name "-block"))
                               (extract-definition (:content (c/get-component-by-name all-components elem-name)) all-components)}
                   :group {(keyword elem-tag)                         {:required (c/char->boolean (:required attrs))}
                           (keyword (subs (str elem-tag "-group") 1)) (extract-definition elem-content all-components)}
@@ -77,3 +93,5 @@
   (println "Generating FIX5.0 SP2 COMPONENT sources ... !")
   (let [[_ components _] (parser/parse "resources/FIX50SP2_FIXT11_combined.xml")]
     (generate-source-file components)))
+
+(-main)

@@ -129,13 +129,4 @@
     (is (spec/valid? ::p/multiple-string-value "1 2 3"))
     (is (spec/valid? ::p/multiple-string-value "aa//bh ZH;:[[ZH6 ss"))))
 
-(utc-timestamp-test) ;TODO remove
-(utc-time-only-test) ;TODO remove
-(utc-date-only-test) ;TODO remove
-(qty-datatype-test) ;TODO remove
-(tz-time-only-test) ;TODO remove
-(tz-timestamp-test) ;TODO remove
-(local-mkt-date-test) ;TODO remove
-(month-year-date-test) ;TODO remove
-(multiple-char-value-test) ;TODO remove
-(multiple-string-value-test) ;TODO remove
+(run-tests)                                                 ;TODO remove

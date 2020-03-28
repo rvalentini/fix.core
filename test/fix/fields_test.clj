@@ -21,4 +21,4 @@
     (is (spec/valid? ::fs/field [:277 "w T d z AH"]))
     (is (not (spec/valid? ::fs/field [:277 "Ah"])))))
 
-(fields-spec-test) ;TODO remove
+(run-tests)                                                 ;TODO remove
