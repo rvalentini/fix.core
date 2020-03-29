@@ -25,45 +25,40 @@
 
 
 
-;TODO this can be done by checking :type only now with new structure
-(defn type-of [elem]
-  (if (seq? elem)
-      (if (is-group? (first elem))                          ;TODO what if empty?
-        :group
-        :component)
-      :field))
 
 
-;TODO pass sub-ordering structure
+(declare matching-seqs?)
+
+;TODO e1 must be large list with all available "flat" tags left
+;TODO the matching must go on until it can be decided if definition can be satisfied
+;TODO case 1: definition satisfied -> return REST OF THE FLAT LIST which bubbles up and matching continues
+;TODO case 2: definition cannot be satisfied -> false
 (defn matching-type? [e1 e2]
-  (let [type-e1 (type-of e1)
-        type-e2 (type-of e2)]
-    (if (not= type-e1 type-e2)
-      false
-      ;TODO call matching-seqs again with substructure
-      )
+  (if (and (not (seq? e1))
+           (= :field (:type e2)))
+    (do (println (str "Compare: " e1 " == " (:tag e2)))
+        (= e1 (:tag e2)))  ;TODO
+    (matching-seqs? e1 e2)))
 
-    )
-  )
 
 (defn matching-elements? [e1 e2]
 
   )
 
-
-;TODO adapt to the new structure of component ordering (do NOT use definition anymore)
-(defn matching-seqs? [given {:keys [definition] :as component}]
+;TODO PROBLEM given is always flat!!! component is nested
+(defn matching-seqs? [given component]
+  (println (str "Called with: " given " and " component))
   (loop [seq-a given
          seq-b (:ordering component)]
-    (println (str "Called with: " seq-a " and " seq-b))
+    (println (str "Inside loop - Called with: " seq-a " and " seq-b))
     (cond
       (and (empty? seq-a) (empty? seq-b)) true
       (and (seq seq-a) (empty? seq-b)) false
-      :else (let [[a & a-tail] seq-a
+      :else (let [[a & a-tail] seq-a ;TODO head destructuring should happen inside matching-type function
                   [b & b-tail] seq-b]
-              (if (= a b)
+              (if (matching-type? a b)
                 (recur a-tail b-tail)
-                (if (not (:required (b definition)))
+                (if (not (:required b))
                   (recur seq-a b-tail)
                   false))))))
 
