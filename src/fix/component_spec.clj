@@ -30,15 +30,18 @@
 
 (declare matching-seqs?)
 
+;TODO test this !!!
+(defn get-num-in-group-count [[given-head & _] [num-in-group & _]]
+  (if (and (= (:tag given-head) (:tag num-in-group))
+           (pos-int? (:value given-head)))
+    (:value given-head)
+    false))
+
 
 (defn required-component-without-required-fields? [comp]
   (when (and (:required comp) (every? #(not (:required %)) (:ordering comp)))
     (warn (str "Required component without any required fields: " (:name comp)))))
 
-;TODO e1 must be large list with all available "flat" tags left
-;TODO the matching must go on until it can be decided if definition can be satisfied
-;TODO case 1: definition satisfied -> return REST OF THE FLAT LIST which bubbles up and matching continues
-;TODO case 2: definition cannot be satisfied -> false
 
 (defn matching-field? [e1 e2]
   (println "--- MATCHING FIELD ---")
@@ -51,7 +54,15 @@
   (case (:type head-comp)
     :group (do
              (println (str "[GROUP] Calling again with: " flat-seq " and " head-comp))
-             (matching-seqs? flat-seq head-comp false))     ;TODO handle NUMINGROUP first elem
+              (loop [num-in-group (get-num-in-group-count flat-seq (:ordering head-comp))
+                     given-seq flat-seq
+                     group-content (drop 1 (:ordering head-comp))]
+                (let [result (matching-seqs? given-seq group-content false)]
+                  (cond
+                    (and (seq? result) (> num-in-group 1)) (recur (dec num-in-group) result group-content)
+                    (and (seq? result) (= num-in-group 1)) result
+                    (and (true? result) (= num-in-group 1)) true
+                    :else false))))     ;TODO test the hell out of this group count impl. !!!
     :component (do
                  (required-component-without-required-fields? head-comp)
                  (println (str "[COMPONENT] Calling again with: " flat-seq " and " head-comp))
@@ -69,8 +80,8 @@
      (println (str "Inside loop - Called with: " seq-a " and " seq-b))
      (cond
        (and (empty? seq-a) (empty? seq-b)) true
-       (and (seq seq-a) (empty? seq-b)) (if is-root-call false seq-a)
-       :else (let [[a & a-tail] seq-a                       ;TODO head destructuring should happen inside matching-type function
+       (and (seq seq-a) (empty? seq-b)) (if is-root-call false seq-a) ;this bubbles up the remaining tags to match
+       :else (let [[a & a-tail] seq-a
                    [b & b-tail] seq-b]
                (if (= :field (:type b))
                  (if (matching-field? a b)
@@ -85,7 +96,7 @@
                      (do
                        (println (str "Unmatched rest bubble up: " rest))
                        (recur rest b-tail))
-                     (recur nil b-tail))                    ;TODO nil or []
+                     (recur nil b-tail))
                    false)))))))
 
 

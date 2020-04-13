@@ -311,6 +311,8 @@
   )
 
 
+;TODO test new group implementation
+;TODO the given flat-seq must already have the format: [{:tag :c33 :value "blahblah"}] otherwise we cannot parse "num-in-group"
 (deftest new-test
   (testing "Everything is fine"
     (is (matching-seqs? [:a :c :c1 :c2 :c31 :c322 :c34 :c4] {:ordering

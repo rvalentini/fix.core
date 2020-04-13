@@ -199,525 +199,198 @@
 
 
 ;Name: StrmAsgnRptInstrmtGrp and Length: 2
-{:ordering {:type :group,
+{:type :group,
+ :required false,
+ :name :NoRelatedSym,
+ :ordering
+ [{:tag :146, :required false, :type :field}
+  [{:type :component,
+    :required false,
+    :name :Instrument,
+    :ordering
+    [[{:tag :55, :required false, :type :field}
+      {:tag :65, :required false, :type :field}
+      {:tag :48, :required false, :type :field}
+      {:tag :22, :required false, :type :field}
+      {:type :component,
+       :required false,
+       :name :SecAltIDGrp,
+       :ordering
+       [{:type :group,
+         :required false,
+         :name :NoSecurityAltID,
+         :ordering
+         [{:tag :454, :required false, :type :field}
+          [{:tag :455, :required false, :type :field}
+           {:tag :456, :required false, :type :field}]]}]}
+      {:tag :460, :required false, :type :field}
+      {:tag :1227, :required false, :type :field}
+      {:tag :1151, :required false, :type :field}
+      {:tag :461, :required false, :type :field}
+      {:tag :167, :required false, :type :field}
+      {:tag :762, :required false, :type :field}
+      {:tag :200, :required false, :type :field}
+      {:tag :541, :required false, :type :field}
+      {:tag :1079, :required false, :type :field}
+      {:tag :966, :required false, :type :field}
+      {:tag :1049, :required false, :type :field}
+      {:tag :965, :required false, :type :field}
+      {:tag :224, :required false, :type :field}
+      {:tag :225, :required false, :type :field}
+      {:tag :239, :required false, :type :field}
+      {:tag :226, :required false, :type :field}
+      {:tag :227, :required false, :type :field}
+      {:tag :228, :required false, :type :field}
+      {:tag :255, :required false, :type :field}
+      {:tag :543, :required false, :type :field}
+      {:tag :470, :required false, :type :field}
+      {:tag :471, :required false, :type :field}
+      {:tag :472, :required false, :type :field}
+      {:tag :240, :required false, :type :field}
+      {:tag :202, :required false, :type :field}
+      {:tag :947, :required false, :type :field}
+      {:tag :967, :required false, :type :field}
+      {:tag :968, :required false, :type :field}
+      {:tag :206, :required false, :type :field}
+      {:tag :231, :required false, :type :field}
+      {:tag :969, :required false, :type :field}
+      {:tag :1146, :required false, :type :field}
+      {:tag :996, :required false, :type :field}
+      {:tag :1147, :required false, :type :field}
+      {:tag :1191, :required false, :type :field}
+      {:tag :1192, :required false, :type :field}
+      {:tag :1193, :required false, :type :field}
+      {:tag :1194, :required false, :type :field}
+      {:tag :1195, :required false, :type :field}
+      {:tag :1196, :required false, :type :field}
+      {:tag :1197, :required false, :type :field}
+      {:tag :1198, :required false, :type :field}
+      {:tag :1199, :required false, :type :field}
+      {:tag :1200, :required false, :type :field}
+      {:tag :201, :required false, :type :field}
+      {:tag :1244, :required false, :type :field}
+      {:tag :1242, :required false, :type :field}
+      {:tag :997, :required false, :type :field}
+      {:tag :223, :required false, :type :field}
+      {:tag :207, :required false, :type :field}
+      {:tag :970, :required false, :type :field}
+      {:tag :971, :required false, :type :field}
+      {:tag :106, :required false, :type :field}
+      {:tag :348, :required false, :type :field}
+      {:tag :349, :required false, :type :field}
+      {:tag :107, :required false, :type :field}
+      {:tag :350, :required false, :type :field}
+      {:tag :351, :required false, :type :field}
+      {:type :component,
+       :required false,
+       :name :SecurityXML,
+       :ordering
+       [[{:tag :1184, :required false, :type :field}
+         {:tag :1185, :required false, :type :field}
+         {:tag :1186, :required false, :type :field}]]}
+      {:tag :691, :required false, :type :field}
+      {:tag :667, :required false, :type :field}
+      {:tag :875, :required false, :type :field}
+      {:tag :876, :required false, :type :field}
+      {:type :component,
+       :required false,
+       :name :EvntGrp,
+       :ordering
+       [{:type :group,
+         :required false,
+         :name :NoEvents,
+         :ordering
+         [{:tag :864, :required false, :type :field}
+          [{:tag :865, :required false, :type :field}
+           {:tag :866, :required false, :type :field}
+           {:tag :1145, :required false, :type :field}
+           {:tag :867, :required false, :type :field}
+           {:tag :868, :required false, :type :field}]]}]}
+      {:tag :873, :required false, :type :field}
+      {:tag :874, :required false, :type :field}
+      {:type :component,
+       :required false,
+       :name :InstrumentParties,
+       :ordering
+       [{:type :group,
+         :required false,
+         :name :NoInstrumentParties,
+         :ordering
+         [{:tag :1018, :required false, :type :field}
+          [{:tag :1019, :required false, :type :field}
+           {:tag :1050, :required false, :type :field}
+           {:tag :1051, :required false, :type :field}
+           {:type :component,
             :required false,
-            :name :NoAsgnReqs,
-            :ordering [{:tag :1499, :required false, :type :field}
-                       [{:type :component,
-                         :required false,
-                         :name :Parties,
-                         :ordering [{:type :group,
-                                     :required false,
-                                     :name :NoPartyIDs,
-                                     :ordering [{:tag :453,
-                                                 :required false,
-                                                 :type :field}
-                                                [{:tag :448,
-                                                  :required false,
-                                                  :type :field}
-                                                 {:tag :447,
-                                                  :required false,
-                                                  :type :field}
-                                                 {:tag :452,
-                                                  :required false,
-                                                  :type :field}
-                                                 {:type :component,
-                                                  :required false,
-                                                  :name :PtysSubGrp,
-                                                  :ordering [{:type :group,
-                                                              :required false,
-                                                              :name :NoPartySubIDs,
-                                                              :ordering [{:tag :802,
-                                                                          :required false,
-                                                                          :type :field}
-                                                                         [{:tag :523,
-                                                                           :required false,
-                                                                           :type :field}
-                                                                          {:tag :803,
-                                                                           :required false,
-                                                                           :type :field}]]}]}]]}]}
-                        {:type :component,
-                         :required false,
-                         :name :StrmAsgnRptInstrmtGrp,
-                         :ordering [{:type :group,
-                                     :required false,
-                                     :name :NoRelatedSym,
-                                     :ordering [{:tag :146,
-                                                 :required false,
-                                                 :type :field}
-                                                [{:type :component,
-                                                  :required false,
-                                                  :name :Instrument,
-                                                  :ordering [[{:tag :55,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :65,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :48,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :22,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:type :component,
-                                                               :required false,
-                                                               :name :SecAltIDGrp,
-                                                               :ordering [{:type :group,
-                                                                           :required false,
-                                                                           :name :NoSecurityAltID,
-                                                                           :ordering [{:tag :454,
-                                                                                       :required false,
-                                                                                       :type :field}
-                                                                                      [{:tag :455,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :456,
-                                                                                        :required false,
-                                                                                        :type :field}]]}]}
-                                                              {:tag :460,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1227,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1151,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :461,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :167,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :762,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :200,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :541,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1079,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :966,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1049,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :965,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :224,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :225,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :239,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :226,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :227,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :228,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :255,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :543,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :470,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :471,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :472,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :240,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :202,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :947,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :967,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :968,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :206,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :231,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :969,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1146,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :996,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1147,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1191,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1192,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1193,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1194,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1195,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1196,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1197,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1198,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1199,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1200,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :201,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1244,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1242,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :997,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :223,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :207,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :970,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :971,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :106,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :348,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :349,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :107,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :350,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :351,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:type :component,
-                                                               :required false,
-                                                               :name :SecurityXML,
-                                                               :ordering [[{:tag :1184,
-                                                                            :required false,
-                                                                            :type :field}
-                                                                           {:tag :1185,
-                                                                            :required false,
-                                                                            :type :field}
-                                                                           {:tag :1186,
-                                                                            :required false,
-                                                                            :type :field}]]}
-                                                              {:tag :691,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :667,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :875,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :876,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:type :component,
-                                                               :required false,
-                                                               :name :EvntGrp,
-                                                               :ordering [{:type :group,
-                                                                           :required false,
-                                                                           :name :NoEvents,
-                                                                           :ordering [{:tag :864,
-                                                                                       :required false,
-                                                                                       :type :field}
-                                                                                      [{:tag :865,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :866,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :1145,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :867,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :868,
-                                                                                        :required false,
-                                                                                        :type :field}]]}]}
-                                                              {:tag :873,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :874,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:type :component,
-                                                               :required false,
-                                                               :name :InstrumentParties,
-                                                               :ordering [{:type :group,
-                                                                           :required false,
-                                                                           :name :NoInstrumentParties,
-                                                                           :ordering [{:tag :1018,
-                                                                                       :required false,
-                                                                                       :type :field}
-                                                                                      [{:tag :1019,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :1050,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :1051,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:type :component,
-                                                                                        :required false,
-                                                                                        :name :InstrumentPtysSubGrp,
-                                                                                        :ordering [{:type :group,
-                                                                                                    :required false,
-                                                                                                    :name :NoInstrumentPartySubIDs,
-                                                                                                    :ordering [{:tag :1052,
-                                                                                                                :required false,
-                                                                                                                :type :field}
-                                                                                                               [{:tag :1053,
-                                                                                                                 :required false,
-                                                                                                                 :type :field}
-                                                                                                                {:tag :1054,
-                                                                                                                 :required false,
-                                                                                                                 :type :field}]]}]}]]}]}
-                                                              {:tag :1435,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1439,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1449,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1450,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1451,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1452,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1457,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1458,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1478,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1479,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1480,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1481,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:tag :1482,
-                                                               :required false,
-                                                               :type :field}
-                                                              {:type :component,
-                                                               :required false,
-                                                               :name :ComplexEvents,
-                                                               :ordering [{:type :group,
-                                                                           :required false,
-                                                                           :name :NoComplexEvents,
-                                                                           :ordering [{:tag :1483,
-                                                                                       :required false,
-                                                                                       :type :field}
-                                                                                      [{:tag :1484,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :1485,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :1486,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :1487,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :1488,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :1489,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:tag :1490,
-                                                                                        :required false,
-                                                                                        :type :field}
-                                                                                       {:type :component,
-                                                                                        :required false,
-                                                                                        :name :ComplexEventDates,
-                                                                                        :ordering [{:type :group,
-                                                                                                    :required false,
-                                                                                                    :name :NoComplexEventDates,
-                                                                                                    :ordering [{:tag :1491,
-                                                                                                                :required false,
-                                                                                                                :type :field}
-                                                                                                               [{:tag :1492,
-                                                                                                                 :required false,
-                                                                                                                 :type :field}
-                                                                                                                {:tag :1493,
-                                                                                                                 :required false,
-                                                                                                                 :type :field}
-                                                                                                                {:type :component,
-                                                                                                                 :required false,
-                                                                                                                 :name :ComplexEventTimes,
-                                                                                                                 :ordering [{:type :group,
-                                                                                                                             :required false,
-                                                                                                                             :name :NoComplexEventTimes,
-                                                                                                                             :ordering [{:tag :1494,
-                                                                                                                                         :required false,
-                                                                                                                                         :type :field}
-                                                                                                                                        [{:tag :1495,
-                                                                                                                                          :required false,
-                                                                                                                                          :type :field}
-                                                                                                                                         {:tag :1496,
-                                                                                                                                          :required false,
-                                                                                                                                          :type :field}]]}]}]]}]}]]}]}]]}
-                                                 {:tag :63,
-                                                  :required false,
-                                                  :type :field}
-                                                 {:tag :1617,
-                                                  :required false,
-                                                  :type :field}
-                                                 {:tag :1500,
-                                                  :required false,
-                                                  :type :field}
-                                                 {:tag :1502,
-                                                  :required false,
-                                                  :type :field}
-                                                 {:tag :58,
-                                                  :required false,
-                                                  :type :field}
-                                                 {:tag :354,
-                                                  :required false,
-                                                  :type :field}
-                                                 {:tag :355,
-                                                  :required false,
-                                                  :type :field}]]}]}]]},
- :definition {:1499 {:required false},
-              :1499-group {:Parties {:required false},
-                           :Parties-block {:453 {:required false},
-                                           :453-group {:tag :452,
-                                                       :required false,
-                                                       :type :field,
-                                                       :PtysSubGrp {:required false},
-                                                       :PtysSubGrp-block {:802 {:required false},
-                                                                          :802-group {:tag :803,
-                                                                                      :required false,
-                                                                                      :type :field}}}},
-                           :StrmAsgnRptInstrmtGrp {:required false},
-                           :StrmAsgnRptInstrmtGrp-block {:146 {:required false},
-                                                         :146-group {:Instrument {:required false},
-                                                                     :Instrument-block {:SecurityXML {:required false},
-                                                                                        :EvntGrp {:required false},
-                                                                                        :ComplexEvents-block {:1483 {:required false},
-                                                                                                              :1483-group {:tag :1490,
-                                                                                                                           :required false,
-                                                                                                                           :type :field,
-                                                                                                                           :ComplexEventDates {:required false},
-                                                                                                                           :ComplexEventDates-block {:1491 {:required false},
-                                                                                                                                                     :1491-group {:tag :1493,
-                                                                                                                                                                  :required false,
-                                                                                                                                                                  :type :field,
-                                                                                                                                                                  :ComplexEventTimes {:required false},
-                                                                                                                                                                  :ComplexEventTimes-block {:1494 {:required false},
-                                                                                                                                                                                            :1494-group {:tag :1496,
-                                                                                                                                                                                                         :required false,
-                                                                                                                                                                                                         :type :field}}}}}},
-                                                                                        :EvntGrp-block {:864 {:required false},
-                                                                                                        :864-group {:tag :868,
-                                                                                                                    :required false,
-                                                                                                                    :type :field}},
-                                                                                        :SecAltIDGrp {:required false},
-                                                                                        :SecAltIDGrp-block {:454 {:required false},
-                                                                                                            :454-group {:tag :456,
-                                                                                                                        :required false,
-                                                                                                                        :type :field}},
-                                                                                        :type :field,
-                                                                                        :SecurityXML-block {:tag :1186,
-                                                                                                            :required false,
-                                                                                                            :type :field},
-                                                                                        :InstrumentParties {:required false},
-                                                                                        :ComplexEvents {:required false},
-                                                                                        :tag :1482,
-                                                                                        :required false,
-                                                                                        :InstrumentParties-block {:1018 {:required false},
-                                                                                                                  :1018-group {:tag :1051,
-                                                                                                                               :required false,
-                                                                                                                               :type :field,
-                                                                                                                               :InstrumentPtysSubGrp {:required false},
-                                                                                                                               :InstrumentPtysSubGrp-block {:1052 {:required false},
-                                                                                                                                                            :1052-group {:tag :1054,
-                                                                                                                                                                         :required false,
-                                                                                                                                                                         :type :field}}}}},
-                                                                     :tag :355,
-                                                                     :required false,
-                                                                     :type :field}}}}}
-
-
-
+            :name :InstrumentPtysSubGrp,
+            :ordering
+            [{:type :group,
+              :required false,
+              :name :NoInstrumentPartySubIDs,
+              :ordering
+              [{:tag :1052, :required false, :type :field}
+               [{:tag :1053, :required false, :type :field}
+                {:tag :1054, :required false, :type :field}]]}]}]]}]}
+      {:tag :1435, :required false, :type :field}
+      {:tag :1439, :required false, :type :field}
+      {:tag :1449, :required false, :type :field}
+      {:tag :1450, :required false, :type :field}
+      {:tag :1451, :required false, :type :field}
+      {:tag :1452, :required false, :type :field}
+      {:tag :1457, :required false, :type :field}
+      {:tag :1458, :required false, :type :field}
+      {:tag :1478, :required false, :type :field}
+      {:tag :1479, :required false, :type :field}
+      {:tag :1480, :required false, :type :field}
+      {:tag :1481, :required false, :type :field}
+      {:tag :1482, :required false, :type :field}
+      {:type :component,
+       :required false,
+       :name :ComplexEvents,
+       :ordering
+       [{:type :group,
+         :required false,
+         :name :NoComplexEvents,
+         :ordering
+         [{:tag :1483, :required false, :type :field}
+          [{:tag :1484, :required false, :type :field}
+           {:tag :1485, :required false, :type :field}
+           {:tag :1486, :required false, :type :field}
+           {:tag :1487, :required false, :type :field}
+           {:tag :1488, :required false, :type :field}
+           {:tag :1489, :required false, :type :field}
+           {:tag :1490, :required false, :type :field}
+           {:type :component,
+            :required false,
+            :name :ComplexEventDates,
+            :ordering
+            [{:type :group,
+              :required false,
+              :name :NoComplexEventDates,
+              :ordering
+              [{:tag :1491, :required false, :type :field}
+               [{:tag :1492, :required false, :type :field}
+                {:tag :1493, :required false, :type :field}
+                {:type :component,
+                 :required false,
+                 :name :ComplexEventTimes,
+                 :ordering
+                 [{:type :group,
+                   :required false,
+                   :name :NoComplexEventTimes,
+                   :ordering
+                   [{:tag :1494, :required false, :type :field}
+                    [{:tag :1495, :required false, :type :field}
+                     {:tag :1496,
+                      :required false,
+                      :type :field}]]}]}]]}]}]]}]}]]}
+   {:tag :63, :required false, :type :field}
+   {:tag :1617, :required false, :type :field}
+   {:tag :1500, :required false, :type :field}
+   {:tag :1502, :required false, :type :field}
+   {:tag :58, :required false, :type :field}
+   {:tag :354, :required false, :type :field}
+   {:tag :355, :required false, :type :field}]]}
 
 
 
