@@ -163,9 +163,213 @@
                                                                                 :required true
                                                                                 :type     :field}]}]}))
 
+
+    (is (matching-seqs? [:a :b :c :c1 :c2 :c31 :c321 :c322 :c33 :c4] {:ordering
+                                                                      [{:tag      :a
+                                                                        :required true
+                                                                        :type     :field}
+                                                                       {:tag      :b
+                                                                        :required true
+                                                                        :type     :field}
+                                                                       {:tag      :c
+                                                                        :required true
+                                                                        :type     :field}
+                                                                       {:type     :component
+                                                                        :required true
+                                                                        :name     "TestComponentA"
+                                                                        :ordering
+                                                                                  [{:tag      :c1
+                                                                                    :required true
+                                                                                    :type     :field}
+                                                                                   {:tag      :c2
+                                                                                    :required true
+                                                                                    :type     :field}
+                                                                                   {:type     :component
+                                                                                    :required true
+                                                                                    :name     "TestComponentB"
+                                                                                    :ordering
+                                                                                              [{:tag      :c31
+                                                                                                :required true
+                                                                                                :type     :field}
+                                                                                               {:type     :component
+                                                                                                :required true
+                                                                                                :name     "TestComponentC"
+                                                                                                :ordering
+                                                                                                          [{:tag      :c321
+                                                                                                            :required true
+                                                                                                            :type     :field}
+                                                                                                           {:tag      :c322
+                                                                                                            :required true
+                                                                                                            :type     :field}]}
+                                                                                               {:tag      :c33
+                                                                                                :required true
+                                                                                                :type     :field}]}
+                                                                                   {:tag      :c4
+                                                                                    :required true
+                                                                                    :type     :field}]}]}))
+
+
+    (is (not (matching-seqs? [:a :b :c :c1 :c2 :c31 :c321 :wrong-tag :c322 :c33 :c4] {:ordering
+                                                                                      [{:tag      :a
+                                                                                        :required true
+                                                                                        :type     :field}
+                                                                                       {:tag      :b
+                                                                                        :required true
+                                                                                        :type     :field}
+                                                                                       {:tag      :c
+                                                                                        :required true
+                                                                                        :type     :field}
+                                                                                       {:type     :component
+                                                                                        :required true
+                                                                                        :name     "TestComponentA"
+                                                                                        :ordering
+                                                                                                  [{:tag      :c1
+                                                                                                    :required true
+                                                                                                    :type     :field}
+                                                                                                   {:tag      :c2
+                                                                                                    :required true
+                                                                                                    :type     :field}
+                                                                                                   {:type     :component
+                                                                                                    :required true
+                                                                                                    :name     "TestComponentB"
+                                                                                                    :ordering
+                                                                                                              [{:tag      :c31
+                                                                                                                :required true
+                                                                                                                :type     :field}
+                                                                                                               {:type     :component
+                                                                                                                :required true
+                                                                                                                :name     "TestComponentC"
+                                                                                                                :ordering
+                                                                                                                          [{:tag      :c321
+                                                                                                                            :required true
+                                                                                                                            :type     :field}
+                                                                                                                           {:tag      :c322
+                                                                                                                            :required true
+                                                                                                                            :type     :field}]}
+                                                                                                               {:tag      :c33
+                                                                                                                :required true
+                                                                                                                :type     :field}]}
+                                                                                                   {:tag      :c4
+                                                                                                    :required true
+                                                                                                    :type     :field}]}]})))
+
+    (is (matching-seqs? [:a :c :c1 :c2 :c31 :c322 :c34 :c4] {:ordering
+                                                             [{:tag      :a
+                                                               :required true
+                                                               :type     :field}
+                                                              {:tag      :b
+                                                               :required false
+                                                               :type     :field}
+                                                              {:tag      :c
+                                                               :required true
+                                                               :type     :field}
+                                                              {:type     :component
+                                                               :required true
+                                                               :name     "TestComponentA"
+                                                               :ordering
+                                                                         [{:tag      :c1
+                                                                           :required false
+                                                                           :type     :field}
+                                                                          {:tag      :c2
+                                                                           :required true
+                                                                           :type     :field}
+                                                                          {:type     :component
+                                                                           :required true
+                                                                           :name     "TestComponentB"
+                                                                           :ordering
+                                                                                     [{:tag      :c31
+                                                                                       :required true
+                                                                                       :type     :field}
+                                                                                      {:type     :component
+                                                                                       :required true
+                                                                                       :name     "TestComponentC"
+                                                                                       :ordering
+                                                                                                 [{:tag      :c321
+                                                                                                   :required false
+                                                                                                   :type     :field}
+                                                                                                  {:tag      :c322
+                                                                                                   :required true
+                                                                                                   :type     :field}]}
+                                                                                      {:type     :component
+                                                                                       :required false
+                                                                                       :name     "TestComponentD"
+                                                                                       :ordering
+                                                                                                 [{:tag      :c331
+                                                                                                   :required false
+                                                                                                   :type     :field}
+                                                                                                  {:tag      :c322
+                                                                                                   :required false
+                                                                                                   :type     :field}]}
+                                                                                      {:tag      :c34
+                                                                                       :required true
+                                                                                       :type     :field}]}
+                                                                          {:tag      :c4
+                                                                           :required true
+                                                                           :type     :field}]}]}))
+
     )
   )
 
 
+(deftest new-test
+  (testing "Everything is fine"
+    (is (matching-seqs? [:a :c :c1 :c2 :c31 :c322 :c34 :c4] {:ordering
+                                                          [{:tag      :a
+                                                            :required true
+                                                            :type     :field}
+                                                           {:tag      :b
+                                                            :required false
+                                                            :type     :field}
+                                                           {:tag      :c
+                                                            :required true
+                                                            :type     :field}
+                                                           {:type     :component
+                                                            :required true
+                                                            :name     "TestComponentA"
+                                                            :ordering
+                                                                      [{:tag      :c1
+                                                                        :required false
+                                                                        :type     :field}
+                                                                       {:tag      :c2
+                                                                        :required true
+                                                                        :type     :field}
+                                                                       {:type     :component
+                                                                        :required true
+                                                                        :name     "TestComponentB"
+                                                                        :ordering
+                                                                                  [{:tag      :c31
+                                                                                    :required true
+                                                                                    :type     :field}
+                                                                                   {:type     :component
+                                                                                    :required true
+                                                                                    :name     "TestComponentC"
+                                                                                    :ordering
+                                                                                              [{:tag      :c321
+                                                                                                :required false
+                                                                                                :type     :field}
+                                                                                               {:tag      :c322
+                                                                                                :required true
+                                                                                                :type     :field}]}
+                                                                                   {:type     :component
+                                                                                    :required false
+                                                                                    :name     "TestComponentD"
+                                                                                    :ordering
+                                                                                              [{:tag      :c331
+                                                                                                :required false
+                                                                                                :type     :field}
+                                                                                               {:tag      :c322
+                                                                                                :required false
+                                                                                                :type     :field}]}
+                                                                                   {:tag      :c34
+                                                                                    :required true
+                                                                                    :type     :field}]}
+                                                                       {:tag      :c4
+                                                                        :required true
+                                                                        :type     :field}]}]}))
+
+    ))
+
+
 ;(nested-component-spec-test)
-(run-tests)
+;(run-tests)
+(new-test)

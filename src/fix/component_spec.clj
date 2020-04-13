@@ -1,5 +1,6 @@
 (ns fix.component-spec
-  (:require [clojure.spec.alpha :as spec]))
+  (:require [clojure.spec.alpha :as spec]
+            [clojure.tools.logging :refer [warn]]))
 
 
 ;<component name='DiscretionInstructions'>
@@ -29,6 +30,11 @@
 
 (declare matching-seqs?)
 
+
+(defn required-component-without-required-fields? [comp]
+  (when (and (:required comp) (every? #(not (:required %)) (:ordering comp)))
+    (warn (str "Required component without any required fields: " (:name comp)))))
+
 ;TODO e1 must be large list with all available "flat" tags left
 ;TODO the matching must go on until it can be decided if definition can be satisfied
 ;TODO case 1: definition satisfied -> return REST OF THE FLAT LIST which bubbles up and matching continues
@@ -39,6 +45,7 @@
   (do (println (str "Compare: " e1 " == " (:tag e2)))
       (= e1 (:tag e2))))
 
+;TODO inline into matching-seqs
 (defn matching-nested? [flat-seq head-comp]
   (println "--- NESTED MATCH ---")
   (case (:type head-comp)
@@ -46,6 +53,7 @@
              (println (str "[GROUP] Calling again with: " flat-seq " and " head-comp))
              (matching-seqs? flat-seq head-comp false))     ;TODO handle NUMINGROUP first elem
     :component (do
+                 (required-component-without-required-fields? head-comp)
                  (println (str "[COMPONENT] Calling again with: " flat-seq " and " head-comp))
                  (matching-seqs? flat-seq head-comp false))))
 
@@ -68,11 +76,15 @@
                  (if (matching-field? a b)
                    (recur a-tail b-tail)
                    (if (not (:required b))
-                     (recur seq-a b-tail)
+                     (do
+                       (println "Not required: " b)
+                       (recur seq-a b-tail))
                      false))
                  (if-let [rest (matching-nested? seq-a b)]
                    (if (seq? rest)
-                     (recur rest b-tail)
+                     (do
+                       (println (str "Unmatched rest bubble up: " rest))
+                       (recur rest b-tail))
                      (recur nil b-tail))                    ;TODO nil or []
                    false)))))))
 
