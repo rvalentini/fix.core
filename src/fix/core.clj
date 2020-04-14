@@ -31,12 +31,20 @@
 ;TODO can groups contain other groups ??? -> otherwise "recur" in components when 2nd level component appears
 
 
-;TODO spec for components:
+
+
 
 ;insights:
 
 ; FIX messages will be flat in the end
 ; FIX message is a sequence of key value pairs
+
+;TODO big picture implementation
+; message type is always defined in the mandatory HEADER
+;parsing:
+;(1) parse header/trailer and check if valid
+;(2) pull the specific message definition and validate content
+
 
 (def parsed-fix [{:tag :345 :value "djcnjsdncjk"}
                  {:tag :346 :value "djcnjsdncjk"}

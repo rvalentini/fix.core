@@ -48,7 +48,7 @@
   (do (println (str "Compare: " (:tag e1) " == " (:tag e2)))
       (= (:tag e1) (:tag e2))))
 
-;TODO inline into matching-seqs
+;TODO think about better variable namings
 (defn matching-nested? [flat-seq head-comp]
   (println "--- NESTED MATCH ---")
   (println (str "HEAD-COMP: " head-comp))
@@ -65,14 +65,13 @@
                     (and (seq? result) (> num-in-group 1)) (recur (dec num-in-group) result group-content-as-component)
                     (and (seq? result) (= num-in-group 1)) result
                     (and (true? result) (= num-in-group 1)) true
-                    :else false))))     ;TODO test the hell out of this group count impl. !!!
+                    :else false))))
     :component (do
                  (required-component-without-required-fields? head-comp)
                  (println (str "[COMPONENT] Calling again with: " flat-seq " and " head-comp))
                  (matching-seqs? flat-seq head-comp false))))
 
 
-;TODO PROBLEM given is always flat!!! component is nested
 (defn matching-seqs?
   ([given component] (matching-seqs? given component true))
   ([given component is-root-call]
@@ -105,3 +104,4 @@
 
 (spec/def ::component true)
 
+;TODO remove printlns and insert useful logging

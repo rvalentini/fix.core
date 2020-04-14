@@ -81,7 +81,7 @@
                               #_(println " ------------------ NEW COMPONENT ------------------")
                               (let [name (get-in component [:attrs :name])
                                     definition (extract-definition (:content component) components)
-                                    ordering (extract-ordering (:content component) components)]
+                                    ordering (extract-ordering (:content component) components)] ;TODO remove definition -> ordering now contains all information
                                 #_(println (str "Name: " name " and Length: " (count definition)))
                                 #_(pprint ordering)
                                 {(keyword name) {:ordering ordering
