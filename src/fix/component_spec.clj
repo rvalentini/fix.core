@@ -30,7 +30,7 @@
 
 (declare matching-seqs?)
 
-;TODO test this !!!
+;TODO check if the num-in-group tag is actually of type NUMINGROUP
 (defn get-num-in-group-count [[given-head & _] [num-in-group & _]]
   (if (and (= (:tag given-head) (:tag num-in-group))
            (pos-int? (:value given-head)))
@@ -45,21 +45,24 @@
 
 (defn matching-field? [e1 e2]
   (println "--- MATCHING FIELD ---")
-  (do (println (str "Compare: " e1 " == " (:tag e2)))
-      (= e1 (:tag e2))))
+  (do (println (str "Compare: " (:tag e1) " == " (:tag e2)))
+      (= (:tag e1) (:tag e2))))
 
 ;TODO inline into matching-seqs
 (defn matching-nested? [flat-seq head-comp]
   (println "--- NESTED MATCH ---")
+  (println (str "HEAD-COMP: " head-comp))
   (case (:type head-comp)
     :group (do
              (println (str "[GROUP] Calling again with: " flat-seq " and " head-comp))
               (loop [num-in-group (get-num-in-group-count flat-seq (:ordering head-comp))
-                     given-seq flat-seq
-                     group-content (drop 1 (:ordering head-comp))]
-                (let [result (matching-seqs? given-seq group-content false)]
+                     given-seq (vec (drop 1 flat-seq))
+                     group-content-as-component {:ordering (second (:ordering head-comp))}]
+                (let [result (matching-seqs? given-seq group-content-as-component false)]
+                  (println (str "Found num-in-group: " num-in-group))
                   (cond
-                    (and (seq? result) (> num-in-group 1)) (recur (dec num-in-group) result group-content)
+                    (false? num-in-group) false
+                    (and (seq? result) (> num-in-group 1)) (recur (dec num-in-group) result group-content-as-component)
                     (and (seq? result) (= num-in-group 1)) result
                     (and (true? result) (= num-in-group 1)) true
                     :else false))))     ;TODO test the hell out of this group count impl. !!!
