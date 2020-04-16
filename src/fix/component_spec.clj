@@ -1,79 +1,56 @@
 (ns fix.component-spec
   (:require [clojure.spec.alpha :as spec]
-            [clojure.tools.logging :refer [warn]]))
+            [clojure.tools.logging :refer [warn]]
+            [fix.definitions.components :as c]))
 
-
-;<component name='DiscretionInstructions'>
-;<field name='DiscretionInst' required='N'/>
-;<field name='DiscretionOffsetValue' required='N'/>
-;<field name='DiscretionMoveType' required='N'/>
-;<field name='DiscretionOffsetType' required='N'/>
-;<field name='DiscretionLimitType' required='N'/>
-;<field name='DiscretionRoundDirection' required='N'/>
-;<field name='DiscretionScope' required='N'/>
-;</component>
-
-;{:ordering [:388 :389 :841 :842 :843 :844 :846], :definition {:388 {:required false}, :389 {:required false}, :841 {:required false}, :842 {:required false}, :843 {:required false}, :844 {:required false}, :846 {:required false}}}
-
-
-(def discretion-instructions [{:tag :388 :value "1"}
-                              {:tag :389 :value 23.43434}
-                              {:tag :841 :value 0}
-                              {:tag :842 :value 2}
-                              {:tag :843 :value 1}
-                              {:tag :844 :value 0}
-                              {:tag :846 :value 1}])
-
-
-
-
-
-(declare matching-seqs?)
+(declare matching-component?)
 
 ;TODO check if the num-in-group tag is actually of type NUMINGROUP
-(defn get-num-in-group-count [[given-head & _] [num-in-group & _]]
+(defn- get-num-in-group-count [[given-head & _] [num-in-group & _]]
   (if (and (= (:tag given-head) (:tag num-in-group))
            (pos-int? (:value given-head)))
     (:value given-head)
     false))
 
-
-(defn required-component-without-required-fields? [comp]
+(defn- required-component-without-required-fields? [comp]
   (when (and (:required comp) (every? #(not (:required %)) (:ordering comp)))
     (warn (str "Required component without any required fields: " (:name comp)))))
 
 
-(defn matching-field? [e1 e2]
+(defn- matching-field? [e1 e2]
   (println "--- MATCHING FIELD ---")
   (do (println (str "Compare: " (:tag e1) " == " (:tag e2)))
       (= (:tag e1) (:tag e2))))
 
-;TODO think about better variable namings
-(defn matching-nested? [flat-seq head-comp]
-  (println "--- NESTED MATCH ---")
-  (println (str "HEAD-COMP: " head-comp))
-  (case (:type head-comp)
-    :group (do
-             (println (str "[GROUP] Calling again with: " flat-seq " and " head-comp))
-              (loop [num-in-group (get-num-in-group-count flat-seq (:ordering head-comp))
-                     given-seq (vec (drop 1 flat-seq))
-                     group-content-as-component {:ordering (second (:ordering head-comp))}]
-                (let [result (matching-seqs? given-seq group-content-as-component false)]
-                  (println (str "Found num-in-group: " num-in-group))
-                  (cond
-                    (false? num-in-group) false
-                    (and (seq? result) (> num-in-group 1)) (recur (dec num-in-group) result group-content-as-component)
-                    (and (seq? result) (= num-in-group 1)) result
-                    (and (true? result) (= num-in-group 1)) true
-                    :else false))))
-    :component (do
-                 (required-component-without-required-fields? head-comp)
-                 (println (str "[COMPONENT] Calling again with: " flat-seq " and " head-comp))
-                 (matching-seqs? flat-seq head-comp false))))
 
+(defn- matching-group? [seq group]
+  (println (str "--- GROUP MATCH ---"))
+  (println (str "[GROUP] Calling again with: " seq " and " group))
+  (loop [num-in-group (get-num-in-group-count seq (:ordering group))
+         given-seq (vec (drop 1 seq))
+         group-content-as-component {:ordering (second (:ordering group))}]
+    (if-let [result (matching-component? given-seq group-content-as-component false)]
+      (if (false? num-in-group)
+        (cond
+          (true? result) true
+          (seq? result) false)
+        (let [final-iteration (= num-in-group 1)]
+          (cond
+            (and final-iteration (true? result)) true
+            (and final-iteration (seq? result)) result
+            (and (not final-iteration) (true? result)) false
+            (and (not final-iteration) (seq? result)) (recur (dec num-in-group) result group-content-as-component))))
+      false)))
 
-(defn matching-seqs?
-  ([given component] (matching-seqs? given component true))
+;TODO inline when debugging can be removed
+(defn- matching-sub-component? [seq component]
+  (println "--- SUB COMPONENT MATCH ---")
+  (required-component-without-required-fields? component)
+  (println (str "[COMPONENT] Calling again with: " seq " and " component))
+  (matching-component? seq component false))
+
+(defn matching-component?
+  ([given component] (matching-component? given component true))
   ([given component is-root-call]
    (println "##### MATCHING SEQS #####")
    (println (str "Called with: " given " and " component))
@@ -93,15 +70,23 @@
                        (println "Not required: " b)
                        (recur seq-a b-tail))
                      false))
-                 (if-let [rest (matching-nested? seq-a b)]
-                   (if (seq? rest)
+                 (if-let [a-rest (case (:type b)
+                                   :group (matching-group? seq-a b)
+                                   :component (matching-sub-component? seq-a b))]
+                   (if (seq? a-rest)
                      (do
-                       (println (str "Unmatched rest bubble up: " rest))
-                       (recur rest b-tail))
+                       (println (str "Unmatched a-rest bubble up: " a-rest))
+                       (recur a-rest b-tail))
                      (recur nil b-tail))
                    false)))))))
 
+(defn- is-component? [[seq comp-name]]
+  (if (and (vector? seq) (keyword? comp-name))
+    (matching-component? seq (comp-name c/components))
+    false))
 
-(spec/def ::component true)
+(spec/def ::component is-component?)
+
+;TODO we will need a distinct spec definition per message type (given via header, so we know which one to match)
 
 ;TODO remove printlns and insert useful logging
