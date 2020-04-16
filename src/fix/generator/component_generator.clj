@@ -64,14 +64,12 @@
                     elem-content (:content elem)
                     elem-tag (c/get-field-tag-by-name (:name attrs))]
                 (case elem-type
-                  :field (build-field attrs elem-content)
-                  :component {(keyword elem-name) {:required (c/char->boolean (:required attrs))}
-                              (keyword (str elem-name "-block"))
-                              (extract-definition (:content (c/get-component-by-name all-components elem-name)) all-components)}
-                  :group {(keyword elem-tag)                         {:required (c/char->boolean (:required attrs))}
-                          (keyword (subs (str elem-tag "-group") 1)) (extract-definition elem-content all-components)}
+                  :field (c/get-field-tag-by-name (:name attrs))
+                  :component [(extract-definition (:content (c/get-component-by-name all-components elem-name)) all-components)]
+                  :group [(keyword elem-tag)
+                          (extract-definition elem-content all-components)]
                   (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type: " elem-type)))))))
-       (reduce merge {})))
+       flatten))
 
 (defn- generate-source-file [components]
   (println (str "Number of components found: " (count components)))
@@ -84,8 +82,8 @@
                                     ordering (extract-ordering (:content component) components)] ;TODO remove definition -> ordering now contains all information
                                 #_(println (str "Name: " name " and Length: " (count definition)))
                                 #_(pprint ordering)
-                                {(keyword name) {:ordering ordering
-                                                 :definition definition}}))
+                                {(keyword name) {:ordering   ordering
+                                                 :definition (into #{} definition)}}))
                             components)]
     (spit-to-file (apply merge gen-components))))
 
