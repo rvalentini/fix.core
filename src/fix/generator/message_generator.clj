@@ -54,7 +54,7 @@
                                  msg-type (get-in message [:attrs :msgtype])
                                  msg-name (get-in message [:attrs :name])
                                  definition (extract-definition (:content message))
-                                 ordering (extract-ordering (:content message))]
+                                 ordering (vec (extract-ordering (:content message)))]
                              {(keyword msg-name) {:category msg-cat
                                                   :type msg-type
                                                   :definition definition

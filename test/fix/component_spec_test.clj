@@ -612,12 +612,7 @@
 
     ))
 
-(deftest new-test
-  (testing "Everything works like a charm "
-    ;146 is NUMINGROUP which must be pos-int, so 0 is not valid
-    (is true)))
 
-;(nested-component-spec-test)
+
 (run-tests)
-;(new-test)
 ;(component-spec-facade)

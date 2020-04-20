@@ -81,7 +81,7 @@
                    false)))))))
 
 (defn- is-component? [[seq comp-name]]
-  (if (and (vector? seq) (keyword? comp-name))
+  (if (keyword? comp-name)
     (matching-component? seq (comp-name c/components))
     false))
 
