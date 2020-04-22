@@ -40,20 +40,10 @@
 ; FIX message is a sequence of key value pairs
 
 ;TODO big picture implementation
-; message type is always defined in the mandatory HEADER
-;parsing:
-;(1) parse header/trailer and check if valid
-;(2) pull the specific message definition and validate content
+
+;TODO validate the actual key value pairs through the component check
 
 
-(def parsed-fix [{:tag :345 :value "djcnjsdncjk"}
-                 {:tag :346 :value "djcnjsdncjk"}
-                 {:tag :347 :value "djcnjsdncjk"}
-                 {:tag :348 :value "djcnjsdncjk"}
-                 {:tag :349 :value "djcnjsdncjk"}
-                 {:tag :350 :value "djcnjsdncjk"}
-                 {:tag :351 :value "djcnjsdncjk"}
-                 {:tag :352 :value "djcnjsdncjk"}])
 
 
 

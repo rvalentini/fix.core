@@ -98,24 +98,23 @@
 
     ))
 
-;TODO way more tests, also negative cases
 
 (deftest message-spec-header-test
   (testing "StandardHeader component is extracted and validated correctly"
-    (is (spec/valid? ::m/message
-                     [{:tag :8 :value "FIXT.1.1" :size 8}
-                      {:tag :9 :value 39 :size 3}
-                      {:tag :35 :value "BR" :size 2}
-                      {:tag :49 :value "SENDER" :size 6}
-                      {:tag :56 :value "RECEIVER" :size 8}
-                      {:tag :34 :value 1 :size 1}
-                      {:tag :52 :value "some-time" :size 9}
-                      {:tag :1111 :value "some-msg-body" :size 13}
-                      {:tag :10 :value "some-checksum" :size 13}]))
-
-    ))
-
+    (let [seq [{:tag :8 :value "FIXT.1.1" :size 9}
+               {:tag :9 :value 65 :size 3}
+               {:tag :35 :value "BR" :size 4}
+               {:tag :49 :value "SENDER" :size 8}
+               {:tag :56 :value "RECEIVER" :size 10}
+               {:tag :34 :value 1 :size 3}
+               {:tag :52 :value "some-time" :size 11}
+               {:tag :1111 :value "some-msg-body" :size 17}
+               {:tag :10 :value "some-checksum" :size 15}]
+          [head _ _] (m/destructure-msg seq)]
+      (is (m/evaluate-header head seq)))))
 
 
+;TODO test actual message spec end-2-end
 
-(checksum-calculation-test)
+;(message-spec-header-test)
+(run-tests)

@@ -17,19 +17,27 @@
     (throw (IllegalArgumentException. (str "Unknown message type: " type)))))
 
 (defn- valid-body-length? [[_ _ & rest] length-in-bytes]
-  (println "REST: " rest)
-  (println "Actual size: " (reduce #(+ %1 (:size %2)) 0 (drop-last rest)))
-  (= (reduce #(+ %1 (:size %2)) 0 (drop-last rest)) length-in-bytes))
+  (let [without-checksum (drop-last rest)]
+    (or
+      (= (+ (* 2 (count without-checksum) 1)                ;all '=' and delimiters
+            (reduce #(+ %1 (:size %2)) 0 without-checksum)) length-in-bytes)
+      (throw (IllegalArgumentException. "Header evaluation failed: body length is invalid!")))))
 
-(defn- evaluate-header [head] ;TODO destructuring into [header body trailer] should happen outside
+(defn- to-bytes [a]
+  (reduce + (map int (if (keyword? a)
+                       (drop 1 (seq (str a)))
+                       (seq (str a))))))
+
+(defn evaluate-header [head seq]
   "Extracts and validates the FIX <StandardHeader> component block.
+   If the validation is successful the method returns the message name, otherwise nil
    The following TAGs are extracted and used for validation:
    :8 - BeginString
    :9 - BodyLength
    :35 - MessageType
    "
   (if (empty? head)
-    (throw (IllegalArgumentException. "Cannot extract any information: header section is empty!"))
+    (throw (IllegalArgumentException. "Header evaluation failed: header section is empty!"))
     (if (spec/valid? ::s/component [head :Header])
       (let [relevant-tags (->> head
                                (filter #((:tag %) #{:8 :9 :35}))
@@ -44,44 +52,28 @@
               msg-name))))
       (println "Header if not valid!"))))
 
-;TODO TEST checksum calculation with 8=FIX.4.19=6135=A34=149=EXEC52=20121105-23:24:0656=BANZAI98=0108=3010=003
-(+ (int \A) (+ (int \2)) (+ (int \3)) (+ (int \5)))
-
-(seq (str 33333))
-
-
-
-(defn- to-bytes [a]
-  (reduce + (map int (if (keyword? a)
-                       (drop 1 (seq (str a)))
-                       (seq (str a))))))
-
-(to-bytes 222)
-(drop 1 (seq (str :111)))
 
 (defn valid-trailer? [seq]
-  (let [checksum (:value (last seq))                       ;TODO make sure the last one is :10
+  "Extracts and validates the FIX <StandardTrailer> component block.
+   The following TAGs are extracted and used for validation:
+   :10 - Checksum
+   "
+  (when-not (= 10 (:tag (last seq)))
+    (throw (IllegalArgumentException. "Trailer evaluation failed: trailer section does not contain any checksum!")))
+  (let [checksum (:value (last seq))
         sum-bytes (reduce #(+ %1 (to-bytes (:tag %2)) (to-bytes (:value %2))) 0 (drop-last seq))
         sum-delimiters (count (drop-last seq))
         sum-equal-symbols (* (count (drop-last seq)) (int \=))]
-    (println "checksum: " checksum " and calc: " (mod (+ sum-bytes sum-delimiters sum-equal-symbols) 256))
     (= checksum  (mod (+ sum-bytes sum-delimiters sum-equal-symbols) 256))))
 
 (defn- is-message? [seq]
-
-  ;TODO destructuring for [header body trailer]
-  ;TODO call each validation method chained with and (header eval must return msgName when valid)
-  (let [[head body tail] (destructure-msg seq)]
-
+  (let [[head body _] (destructure-msg seq)]
     ;TODO use head only for header eval
-
-    (if-let [msg-name (evaluate-header head)]
-      msg-name
-      )
-
-    )
-
-
-  )
+    (if-let [msg-name (evaluate-header head seq)]
+      (if (valid-trailer? seq)
+        msg-name  ;TODO (spec/valid? ::s/component [body (keyword msg-name)])
+        (throw (IllegalArgumentException. "Trailer evaluation failed: checksum is not correct!"))))))
 
 (spec/def ::message  is-message?)
+
+;TODO error logs instead of exceptions: CAREFUL! not just exchangeable!
