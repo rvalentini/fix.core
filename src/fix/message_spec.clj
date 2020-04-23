@@ -2,7 +2,8 @@
   (:require [clojure.spec.alpha :as spec]
             [fix.definitions.components :as c]
             [fix.component-spec :as s]
-            [fix.definitions.messages :as m]))
+            [fix.definitions.messages :as m]
+            [clojure.tools.logging :refer [warn debug]]))
 
 (def supported-versions #{"FIXT.1.1"})
 
@@ -58,20 +59,24 @@
    The following TAGs are extracted and used for validation:
    :10 - Checksum
    "
-  (when-not (= 10 (:tag (last seq)))
+  (when-not (= :10 (:tag (last seq)))
     (throw (IllegalArgumentException. "Trailer evaluation failed: trailer section does not contain any checksum!")))
-  (let [checksum (:value (last seq))
+  (let [checksum (Integer/parseInt (:value (last seq)))
         sum-bytes (reduce #(+ %1 (to-bytes (:tag %2)) (to-bytes (:value %2))) 0 (drop-last seq))
         sum-delimiters (count (drop-last seq))
         sum-equal-symbols (* (count (drop-last seq)) (int \=))]
+    (println "checksum: " checksum " vs. calc: " (mod (+ sum-bytes sum-delimiters sum-equal-symbols) 256))
     (= checksum  (mod (+ sum-bytes sum-delimiters sum-equal-symbols) 256))))
 
 (defn- is-message? [seq]
   (let [[head body _] (destructure-msg seq)]
-    ;TODO use head only for header eval
     (if-let [msg-name (evaluate-header head seq)]
       (if (valid-trailer? seq)
-        msg-name  ;TODO (spec/valid? ::s/component [body (keyword msg-name)])
+        (do
+          (debug "Header and Trailer valid! Continuing with body validation for msg-type: " msg-name)
+          (let [message (:ordering (msg-name m/messages))
+                as-component {:ordering (map #(if (keyword? %) (:odering (% c/components)) %) message)}]
+            (spec/valid? ::s/component [body as-component])))
         (throw (IllegalArgumentException. "Trailer evaluation failed: checksum is not correct!"))))))
 
 (spec/def ::message  is-message?)

@@ -80,10 +80,11 @@
                      (recur nil b-tail))
                    false)))))))
 
-(defn- is-component? [[seq comp-name]]
-  (if (keyword? comp-name)
-    (matching-component? seq (comp-name c/components))
-    false))
+(defn- is-component? [[seq comp]]
+  (cond
+    (keyword? comp) (matching-component? seq (comp c/components))
+    (and (map? comp) (contains? comp :ordering)) (matching-component? seq comp)
+    :else false))
 
 (spec/def ::component is-component?)
 

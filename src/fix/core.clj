@@ -41,7 +41,17 @@
 
 ;TODO big picture implementation
 
-;TODO validate the actual key value pairs through the component check
+
+;TODO (1) validate the actual key value pairs through the component check
+;TODO (2) test more complex message types
+;TODO (3) clean up logging with timbre
+;TODO (4) write parser for ASCII FIX and map correctly to current format used
+;TODO (5) move duplications to util
+;TODO (6) throw out all old namespaces
+;TODO (7) go through all remaining TODOS
+;TODO (8) remove debug (run-tests)
+;TODO (9) write nice README
+
 
 
 

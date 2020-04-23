@@ -32,15 +32,25 @@
                   (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type: " elem-type)))))))
        (reduce merge {})))
 
+;TODO code duplication move to util or similar
+(defn- build-field [field-attrs field-content]
+  (c/assert-empty-content field-content)
+  (let [field-tag (c/get-field-tag-by-name (:name field-attrs))
+        required (c/char->boolean (:required field-attrs))]
+    {:tag field-tag
+     :required required
+     :type :field}))
+
 (defn- extract-ordering [content]
   (->> content
        (map (fn [elem]
               (let [attrs (:attrs elem)
                     elem-type (:tag elem)
                     elem-name (:name attrs)
+                    elem-content (:content elem)
                     elem-tag (c/get-field-tag-by-name (:name attrs))]
                 (case elem-type
-                  :field elem-tag
+                  :field (build-field attrs elem-content)
                   :component (keyword elem-name)))))))
 
 (defn- generate-source-file [messages]
