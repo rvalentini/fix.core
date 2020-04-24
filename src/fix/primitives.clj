@@ -53,28 +53,4 @@
 (spec/def ::country #(and (string? %) (= (count %) 2)))
 (spec/def ::xml-data string?)
 
-
-;TODO remove non-primitive types below
-(spec/def ::cl-ord-id string?)
-(spec/def ::symbol string?)
-
-(spec/def ::percent float?)
-
-(spec/def ::order-qty ::qty)
-(spec/def ::cash-order-qty ::qty)
-(spec/def ::order-percent ::percent)
-(spec/def ::rounding-direction char?)
-(spec/def ::rounding-modulus float?)
-(spec/def ::side char?)
-(spec/def ::transact-time ::utc-timestamp)
-
-(spec/def ::begin-string string?)
-(spec/def ::body-length pos-int?)
-(spec/def ::msg-type string?)
-(spec/def ::sender-comp-id string?)
-(spec/def ::target-comp-id string?)
-(spec/def ::sending-time ::utc-timestamp)
-
-(spec/def ::check-sum string?)
-
-(spec/def ::on-behalf-of-comp-id string?)
+;TODO precondition: all values given for validation are still raw string!!! make parsing with (edn/read-string) part of validation

@@ -107,7 +107,7 @@
                {:tag :49 :value "SENDER" :size 8}
                {:tag :56 :value "RECEIVER" :size 10}
                {:tag :34 :value 1 :size 3}
-               {:tag :52 :value "some-time" :size 11}
+               {:tag :52 :value "19990101-00:00:00" :size 11}
                {:tag :1111 :value "some-msg-body" :size 17}
                {:tag :10 :value "some-checksum" :size 15}]
           [head _ _] (m/destructure-msg seq)]

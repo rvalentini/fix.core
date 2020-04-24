@@ -5,8 +5,9 @@
             [fix.primitives :as p]))
 
 (defn key-value? [arg]
-  (and (coll? arg)
-       (= 2 (count arg))))
+  (println "Given: " arg)
+  (and (contains? arg :tag)
+       (contains? arg :value)))
 
 
 (def type-specs
@@ -54,20 +55,18 @@
       (every? #(contains? enums-as-set %) values-as-seq))
     (contains? enums values)))
 
-(defn field? [arg]
-  (let [[tag value] arg
-        field-attr (tag f/fields)
+(defn field? [{:keys [tag value]}]
+  (let [field-attr (tag f/fields)
         type (raw->spec (:type field-attr))]
     (if (some? field-attr)
       (if-let [enums (:values field-attr)]
         (and
-          (spec/valid? type value)
+          (do (println "Type: " type " vs value: " value) (spec/valid? type value))
           (is-valid-enum? type value enums))
         (spec/valid? type value)))))
 
 (spec/def ::field (spec/and key-value? field?))
 
-;TODO change from [tag value] to {:tag tag :value value}
 
 
 
