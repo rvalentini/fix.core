@@ -102,11 +102,11 @@
 (deftest message-spec-header-test
   (testing "StandardHeader component is extracted and validated correctly"
     (let [seq [{:tag :8 :value "FIXT.1.1" :size 9}
-               {:tag :9 :value 65 :size 3}
+               {:tag :9 :value "65" :size 3}
                {:tag :35 :value "BR" :size 4}
                {:tag :49 :value "SENDER" :size 8}
                {:tag :56 :value "RECEIVER" :size 10}
-               {:tag :34 :value 1 :size 3}
+               {:tag :34 :value "1" :size 3}
                {:tag :52 :value "19990101-00:00:00" :size 11}
                {:tag :1111 :value "some-msg-body" :size 17}
                {:tag :10 :value "some-checksum" :size 15}]
@@ -120,22 +120,22 @@
   (testing "Complete FIX message validation for empty Heartbeat message type"
     ;8=FIXT.1.1^9=65^35=0^49=BuySide^56=SellSide^34=3^52=20190605-12:45:24.919^1128=9^10=064^
     (is (spec/valid? ::m/message [{:tag :8 :value "FIXT.1.1" :size 9}
-                                  {:tag :9 :value 65 :size 3}
+                                  {:tag :9 :value "65" :size 3}
                                   {:tag :35 :value "0" :size 3}
                                   {:tag :49 :value "BuySide" :size 9}
                                   {:tag :56 :value "SellSide" :size 10}
-                                  {:tag :34 :value 3 :size 3}
+                                  {:tag :34 :value "3" :size 3}
                                   {:tag :52 :value "20190605-12:45:24.919" :size 23}
                                   {:tag :1128 :value 9 :size 5}
                                   {:tag :10 :value "064" :size 5}])))
   (testing "Complete FIX message validation for Heartbeat message type with :112 content"
     ;same message as above but with :112 content this time (body length and checksum adjusted)
     (is (spec/valid? ::m/message [{:tag :8 :value "FIXT.1.1" :size 9}
-                                  {:tag :9 :value 82 :size 3}
+                                  {:tag :9 :value "82" :size 3}
                                   {:tag :35 :value "0" :size 3}
                                   {:tag :49 :value "BuySide" :size 9}
                                   {:tag :56 :value "SellSide" :size 10}
-                                  {:tag :34 :value 3 :size 3}
+                                  {:tag :34 :value "3" :size 3}
                                   {:tag :52 :value "20190605-12:45:24.919" :size 23}
                                   {:tag :1128 :value 9 :size 5}
                                   {:tag :112 :value "some-test-id" :size 15}

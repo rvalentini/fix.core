@@ -659,11 +659,11 @@
   (testing "Invoking the matching logic via the component spec/def is working as intended"
     (is (spec/valid? ::c/component
                      [[{:tag :8 :value "FIX5.0"}
-                       {:tag :9 :value 111}
+                       {:tag :9 :value "111"}
                        {:tag :35 :value "AE"}
                        {:tag :49 :value "my-comp-id"}
                        {:tag :56 :value "your-comp-id"}
-                       {:tag :34 :value 4}
+                       {:tag :34 :value "4"}
                        {:tag :143 :value "some-target-location-id"}
                        {:tag :52 :value "20190202-01:00:00"}
                        {:tag :347 :value "some-very-fancy-encoding"}]

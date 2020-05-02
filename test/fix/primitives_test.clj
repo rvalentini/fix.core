@@ -96,12 +96,13 @@
 
 (deftest qty-datatype-test
   (testing "spec for 'qty' data type is correctly defined"
-    (is (spec/valid? ::p/qty 34))
-    (is (spec/valid? ::p/qty 0))
-    (is (spec/valid? ::p/qty 1.345))
-    (is (spec/valid? ::p/qty 2453.0))
-    (is (spec/valid? ::p/qty 10.0))
-    (is (not (spec/valid? ::p/qty 1/2)))))
+    (is (spec/valid? ::p/qty "34"))
+    (is (spec/valid? ::p/qty "0"))
+    (is (spec/valid? ::p/qty "1.345"))
+    (is (spec/valid? ::p/qty "2453.0"))
+    (is (not (spec/valid? ::p/qty "ABC")))
+    (is (spec/valid? ::p/qty "10.0"))
+    (is (not (spec/valid? ::p/qty "1/2")))))
 
 (deftest multiple-char-value-test
   (testing "spec for multiple-char-value is correctly defined"

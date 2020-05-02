@@ -1,6 +1,7 @@
 (ns fix.primitives
   (:require [clojure.spec.alpha :as spec]
-            [clojure.string :as s]))
+            [clojure.string :as s]
+            [fix.utils :refer [parse-number]]))
 
 (def utc-timestamp #"^(-?(?:[1-9][0-9]*)?[0-9]{4})(1[0-2]|0[1-9])(3[01]|0[1-9]|[12][0-9])-(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\.[0-9]{3})?$")
 (spec/def ::utc-timestamp #(re-matches utc-timestamp %))
@@ -29,28 +30,30 @@
 (def multiple-string-value #"^(?:[\w|\p{Punct}]*\s)*[\w|\p{Punct}]+$")
 (spec/def ::multiple-string-value #(re-matches multiple-string-value %))
 
+(spec/def ::size-1 #(= (count %) 1))
+(spec/def ::size-2 #(= (count %) 2))
+(spec/def ::size-3 #(= (count %) 3))
+(spec/def ::size-4 #(= (count %) 4))
+
 (spec/def ::string string?)
-(spec/def ::int int?)
-(spec/def ::char char?)
-(spec/def ::float float?)
+(spec/def ::int #(int? (parse-number %)))
+(spec/def ::pos-int #(pos-int? (parse-number %)))
+(spec/def ::char (spec/and ::string ::size-1))
+(spec/def ::float #(float? (parse-number %)))
 
-(spec/def ::amt float?) ;amount
-(spec/def ::num-in-group pos-int?)
-(spec/def ::data string?)
-(spec/def ::length pos-int?)
-(spec/def ::percentage float?)
-(spec/def ::boolean #(and (char? %) (or (= "Y" %)
-                                        (= "N" %))))
-(spec/def ::exchange #(and (string? %)
-                           (s/starts-with? % "x")
-                           (= (count %) 4)))
-(spec/def ::price float?)
-(spec/def ::qty #(or (float? %) (int? %)))
-(spec/def ::currency #(and (string? %) (= (count %) 3)))
-(spec/def ::price-offset float?)
-(spec/def ::language #(and (string? %) (= (count %) 2)))
-(spec/def ::seq-num pos-int?)
-(spec/def ::country #(and (string? %) (= (count %) 2)))
-(spec/def ::xml-data string?)
+(spec/def ::amt ::float) ;amount
+(spec/def ::num-in-group ::pos-int)
+(spec/def ::data ::string)
+(spec/def ::length ::pos-int)
+(spec/def ::percentage ::float)
+(spec/def ::boolean (spec/and ::char #(or (= "Y" %) (= "N" %))))
+(spec/def ::exchange (spec/and ::string #(s/starts-with? % "x") ::size-4))
+(spec/def ::price ::float)
+(spec/def ::qty (spec/or :int ::int :float ::float))
+(spec/def ::currency (spec/and ::string ::size-3))
+(spec/def ::price-offset ::float)
+(spec/def ::language (spec/and ::string ::size-2))
+(spec/def ::seq-num ::pos-int)
+(spec/def ::country (spec/and ::string ::size-2))
+(spec/def ::xml-data ::string)
 
-;TODO precondition: all values given for validation are still raw string!!! make parsing with (edn/read-string) part of validation

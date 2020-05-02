@@ -3,7 +3,8 @@
             [fix.definitions.components :as c]
             [fix.component-spec :as s]
             [fix.definitions.messages :as m]
-            [clojure.tools.logging :refer [warn debug]]))
+            [clojure.tools.logging :refer [warn debug]]
+            [fix.utils :refer [parse-number]]))
 
 (def supported-versions #{"FIXT.1.1"})
 
@@ -21,7 +22,7 @@
   (let [without-checksum (drop-last rest)]
     (or
       (= (+ (* 2 (count without-checksum) 1)                ;all '=' and delimiters
-            (reduce #(+ %1 (:size %2)) 0 without-checksum)) length-in-bytes)
+            (reduce #(+ %1 (:size %2)) 0 without-checksum)) (parse-number length-in-bytes))
       (throw (IllegalArgumentException. "Header evaluation failed: body length is invalid!")))))
 
 (defn- to-bytes [a]
