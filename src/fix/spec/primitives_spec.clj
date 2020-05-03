@@ -1,4 +1,4 @@
-(ns fix.primitives-spec
+(ns fix.spec.primitives-spec
   (:require [clojure.spec.alpha :as spec]
             [clojure.string :as s]
             [fix.utils :refer [parse-number]]))

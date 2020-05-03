@@ -49,10 +49,12 @@
 ;DONE (4) write parser for ASCII FIX and map correctly to current format used
 ;DONE all values given for validation at field level are still raw string!!! make parsing with (edn/read-string) part of validation at lowest level
 ;TODO (5) move duplications to util
-;TODO (6) throw out all old namespaces
+;DONE (6) throw out all old namespaces
+;TODO (6) remove test.edn
 ;TODO (7) go through all remaining TODOS
 ;TODO (8) remove debug (run-tests)
-;TODO (9) write nice README
+;TODO (9) update lein dependencies and clj version
+;TODO (10) write nice README
 
 
 

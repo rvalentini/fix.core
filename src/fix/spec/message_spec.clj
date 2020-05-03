@@ -1,7 +1,7 @@
-(ns fix.message-spec
+(ns fix.spec.message-spec
   (:require [clojure.spec.alpha :as spec]
             [fix.definitions.components :as c]
-            [fix.component-spec :as s]
+            [fix.spec.component-spec :as s]
             [fix.definitions.messages :as m]
             [clojure.tools.logging :refer [warn debug]]
             [fix.utils :refer [parse-number]]))

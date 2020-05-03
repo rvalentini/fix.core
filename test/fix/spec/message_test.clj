@@ -1,6 +1,6 @@
-(ns fix.message-spec-test
+(ns fix.spec.message-test
   (:require [clojure.test :refer :all]
-            [fix.message-spec :as m]
+            [fix.spec.message-spec :as m]
             [clojure.spec.alpha :as spec]))
 
 

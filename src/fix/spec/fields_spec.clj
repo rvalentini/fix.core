@@ -1,8 +1,8 @@
-(ns fix.fields-spec
+(ns fix.spec.fields-spec
   (:require [clojure.spec.alpha :as spec]
             [clojure.string :as string]
             [fix.definitions.fields :as f]
-            [fix.primitives-spec :as p]))
+            [fix.spec.primitives-spec :as p]))
 
 (defn key-value? [arg]
   (println "Given: " arg)

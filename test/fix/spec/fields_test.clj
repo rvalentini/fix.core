@@ -1,7 +1,7 @@
-(ns fix.fields_test
+(ns fix.spec.fields-test
   (:require [clojure.test :refer :all]
             [clojure.spec.alpha :as spec]
-            [fix.fields-spec :as fs]))
+            [fix.spec.fields-spec :as fs]))
 
 
 (deftest fields-spec-test

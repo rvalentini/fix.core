@@ -1,7 +1,7 @@
-(ns fix.component-spec-test
+(ns fix.spec.component-test
   (:require [clojure.test :refer :all]
             [clojure.spec.alpha :as spec]
-            [fix.component-spec :as c :refer [matching-component?]]))
+            [fix.spec.component-spec :as c :refer [matching-component?]]))
 
 
 (deftest simple-component-spec-test

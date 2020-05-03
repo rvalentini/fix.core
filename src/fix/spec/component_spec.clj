@@ -1,8 +1,8 @@
-(ns fix.component-spec
+(ns fix.spec.component-spec
   (:require [clojure.spec.alpha :as spec]
             [clojure.tools.logging :refer [warn]]
             [fix.definitions.components :as c]
-            [fix.fields-spec :as f]))
+            [fix.spec.fields-spec :as f]))
 
 (declare matching-component?)
 
