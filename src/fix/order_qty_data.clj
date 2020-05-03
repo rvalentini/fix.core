@@ -1,6 +1,6 @@
 (ns fix.order-qty-data
   (:require [clojure.spec.alpha :as spec]
-            [fix.primitives :as p]))
+            [fix.primitives-spec :as p]))
 
 (spec/def ::order-qty-data
   {:38 ::p/order-qty

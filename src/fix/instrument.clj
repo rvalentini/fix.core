@@ -1,6 +1,6 @@
 (ns fix.instrument
   (:require [clojure.spec.alpha :as spec]
-            [fix.primitives :as p]))
+            [fix.primitives-spec :as p]))
 
 
 (spec/def ::instrument

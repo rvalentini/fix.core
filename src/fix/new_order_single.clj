@@ -1,6 +1,6 @@
 (ns fix.new-order-single
   (:require [clojure.spec.alpha :as spec]
-            [fix.primitives :as p]
+            [fix.primitives-spec :as p]
             [fix.standard-header :as sh]
             [fix.standard-trailer :as st]
             [fix.instrument :as i]

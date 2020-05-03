@@ -2,7 +2,7 @@
   (:require [clojure.spec.alpha :as spec]
             [clojure.string :as string]
             [fix.definitions.fields :as f]
-            [fix.primitives :as p]))
+            [fix.primitives-spec :as p]))
 
 (defn key-value? [arg]
   (println "Given: " arg)

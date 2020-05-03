@@ -1,6 +1,6 @@
 (ns fix.standard-trailer
   (:require [clojure.spec.alpha :as spec]
-            [fix.primitives :as p]))
+            [fix.primitives-spec :as p]))
 
 
 (spec/def ::standard-trailer

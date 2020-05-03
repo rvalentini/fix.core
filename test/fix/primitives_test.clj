@@ -1,7 +1,7 @@
 (ns fix.primitives-test
   (:require [clojure.test :refer :all]
             [clojure.spec.alpha :as spec]
-            [fix.primitives :as p ]))
+            [fix.primitives-spec :as p ]))
 
 
 (deftest utc-timestamp-test
