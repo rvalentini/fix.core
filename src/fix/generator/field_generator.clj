@@ -1,5 +1,6 @@
 (ns fix.generator.field-generator
-  (:require [fix.parser.xml-parser :as parser]))
+  (:require [fix.parser.xml-parser :as parser]
+            [taoensso.timbre :refer [info]]))
 
 (defn- spit-to-file [field-map]
   (let [header '(ns fix.definitions.fields)
@@ -17,7 +18,7 @@
     (reduce merge {} result)))
 
 (defn- extract-definition [fields]
-  (println (str "Number of fields found: " (count fields)))
+  (info "Number of fields found:" (count fields))
   (let [gen-fields (map
                         (fn [field]
                           (let [name (get-in field [:attrs :name])
@@ -36,9 +37,6 @@
     (extract-definition fields)))
 
 (defn -main [& _]
-  (println "Generating FIX5.0 SP2 FIELD sources ... !")
+  (info "Generating FIX5.0 SP2 FIELD sources ... !")
   (let [[fields _] (parser/parse "resources/FIX50SP2_FIXT11_combined.xml")]
     (generate-source-file fields)))
-
-
-

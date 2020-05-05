@@ -10,12 +10,12 @@
   (case char
     "N" false
     "Y" true
-    (throw (IllegalArgumentException. (str "Given char is neither 'N' nor 'Y': " char)))))
+    (throw (IllegalArgumentException. (str "Given char is neither 'N' nor 'Y':" char)))))
 
 (defn get-component-by-name [components name]
   (let [matches (filter #(= (get-in % [:attrs :name]) name) components)]
     (if (nil? matches)
-      (throw (NoSuchElementException. (str "Component " name " does not exist!")))
+      (throw (NoSuchElementException. (str "Component" name "does not exist!")))
       (first matches))))
 
 (defn get-field-tag-by-name [field-name]
@@ -23,11 +23,7 @@
                      (filter (fn [[_ v]] (= (:name v) field-name)))
                      (map first))]
     (if (nil? matches)
-      (throw (NoSuchElementException. (str "Field " field-name " does not exist!")))
+      (throw (NoSuchElementException. (str "Field" field-name "does not exist!")))
       (first matches))))
 
-(defn build-field [field-attrs field-content]
-  (assert-empty-content field-content)
-  (let [field-tag (get-field-tag-by-name (:name field-attrs))
-        required (char->boolean (:required field-attrs))]
-    {field-tag {:required required}}))
+

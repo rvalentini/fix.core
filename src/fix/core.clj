@@ -44,7 +44,7 @@
 
 ;DONE (1) validate the actual key value pairs through the component check
 ;TODO (2) test more complex message types
-;TODO (3) clean up logging with timbre -> extend to other namespaces
+;DONE (3) clean up logging with timbre -> extend to other namespaces
 ;TODO (4) implement core (HERE)
 ;DONE (4) write parser for ASCII FIX and map correctly to current format used
 ;DONE all values given for validation at field level are still raw string!!! make parsing with (edn/read-string) part of validation at lowest level

@@ -1,6 +1,6 @@
 (ns fix.spec.component-spec
   (:require [clojure.spec.alpha :as spec]
-            [clojure.tools.logging :refer [warn]]
+            [taoensso.timbre :refer [error info warn debug]]
             [fix.definitions.components :as c]
             [fix.spec.fields-spec :as f]))
 
@@ -15,18 +15,18 @@
 
 (defn- required-component-without-required-fields? [comp]
   (when (and (:required comp) (every? #(not (:required %)) (:ordering comp)))
-    (warn (str "Required component without any required fields: " (:name comp)))))
+    (warn "Required component without any required fields: " (:name comp))))
 
 
 (defn- matching-field? [e1 e2]
-  (println "--- MATCHING FIELD ---")
-  (do (println (str "Compare: " (:tag e1) " == " (:tag e2)))
-      (= (:tag e1) (:tag e2))))
+  (debug "--- MATCHING FIELD ---")
+  (debug "Comparing the field tags:" (:tag e1) "==" (:tag e2))
+  (= (:tag e1) (:tag e2)))
 
 
 (defn- matching-group? [seq group deep-eval]
-  (println (str "--- GROUP MATCH ---"))
-  (println (str "[GROUP] Calling again with: " seq " and " group))
+  (debug "--- MATCHING GROUP ---")
+  (debug "Group match called with:" seq "and" group)
   (loop [num-in-group (get-num-in-group-count seq (:ordering group))
          given-seq (vec (drop 1 seq))
          group-content-as-component {:ordering (second (:ordering group))}]
@@ -34,30 +34,34 @@
       (if (false? num-in-group)
         (cond
           (true? result) true
-          (seq? result) false)
+          (seq? result) (do
+                          (error "Missing num-in-group definition for repeating values for group"
+                                 (:tag (first (:ordering group))))
+                          false))
         (let [final-iteration (= num-in-group 1)]
           (cond
             (and final-iteration (true? result)) true
             (and final-iteration (seq? result)) result
-            (and (not final-iteration) (true? result)) false
+            (and (not final-iteration) (true? result)) (do
+                                                         (error "Group" (:tag (first (:ordering group)))
+                                                                "contains less repetitions than expected")
+                                                         false)
             (and (not final-iteration) (seq? result)) (recur (dec num-in-group) result group-content-as-component))))
       false)))
 
-;TODO inline when debugging can be removed
 (defn- matching-sub-component? [seq component deep-eval]
-  (println "--- SUB COMPONENT MATCH ---")
+  (debug "--- MATCHING SUB-COMPONENT ---")
+  (debug "Sub-component match called with:" seq "and" component)
   (required-component-without-required-fields? component)
-  (println (str "[COMPONENT] Calling again with: " seq " and " component))
   (matching-component? seq component false deep-eval))
 
 (defn matching-component?
   ([given component] (matching-component? given component true true))
   ([given component is-root-call deep-eval]
-   (println "##### MATCHING SEQS #####")
-   (println (str "Called with: " given " and " component))
+   (debug "--- MATCHING COMPONENT ---")
+   (debug "Matching component called with:" given "and" component)
    (loop [seq-a given
           seq-b (:ordering component)]
-     (println (str "Inside loop - Called with: " seq-a " and " seq-b))
      (cond
        (and (empty? seq-a) (empty? seq-b)) true
        (and (seq seq-a) (empty? seq-b)) (if is-root-call false seq-a) ;this bubbles up the remaining tags to match
@@ -67,19 +71,22 @@
                  (if (matching-field? a b)
                    (if (or (spec/valid? ::f/field a)(not deep-eval))
                      (recur a-tail b-tail)
-                     (do (println "Field is not valid: " a)
-                         false))
+                     (do
+                       (error "Field is invalid:" a)
+                       false))
                    (if (not (:required b))
                      (do
-                       (println "Not required: " b)
+                       (debug "Field is not required:" b)
                        (recur seq-a b-tail))
-                     false))
+                     (do
+                       (error "Field tag does not match the definition:" (:tag a) "vs" (:tag b))
+                       false)))
                  (if-let [a-rest (case (:type b)
                                    :group (matching-group? seq-a b deep-eval)
                                    :component (matching-sub-component? seq-a b deep-eval))]
                    (if (seq? a-rest)
                      (do
-                       (println (str "Unmatched a-rest bubble up: " a-rest))
+                       (debug "Bubbling up the remaining message part up the call hierarchy:" a-rest)
                        (recur a-rest b-tail))
                      (recur nil b-tail))
                    false)))))))
@@ -92,4 +99,3 @@
 
 (spec/def ::component is-component?)
 
-;TODO remove printlns and insert useful logging

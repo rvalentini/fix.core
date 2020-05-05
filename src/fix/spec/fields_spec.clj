@@ -5,7 +5,6 @@
             [fix.spec.primitives-spec :as p]))
 
 (defn key-value? [arg]
-  (println "Given: " arg)
   (and (contains? arg :tag)
        (contains? arg :value)))
 
@@ -61,7 +60,7 @@
     (if (some? field-attr)
       (if-let [enums (:values field-attr)]
         (and
-          (do (println "Type: " type " vs value: " value) (spec/valid? type value))
+          (spec/valid? type value)
           (is-valid-enum? type value enums))
         (spec/valid? type value)))))
 

@@ -1,7 +1,7 @@
 (ns fix.generator.component-generator
-  (:require [clojure.pprint :refer [pprint]]
-            [fix.parser.xml-parser :as parser]
-            [fix.generator.commons :as c]))
+  (:require [fix.parser.xml-parser :as parser]
+            [fix.generator.commons :as c]
+            [taoensso.timbre :refer [info]]))
 
 (defn- assert-component [component]
   {:pre [(= (:tag component) :component)]}
@@ -27,9 +27,6 @@
     (first arg)
     (vec arg)))
 
-
-;TODO rename ordering to content or similar
-;TODO check if "definition" can now be deleted completely
 (defn- extract-ordering [content all-components]
   (->> content
        (map (fn [elem]
@@ -51,10 +48,9 @@
                                        :required (c/char->boolean (:required attrs))
                                        :type :field}
                                       (extract-ordering elem-content all-components)]}
-                  (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type: " elem-type)))))))
+                  (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type:" elem-type)))))))
        flatten-vec-of-vec))
 
-;TODO definition is now basically obsolete
 (defn- extract-definition [content all-components]
   (->> content
        (map (fn [elem]
@@ -68,28 +64,23 @@
                   :component [(extract-definition (:content (c/get-component-by-name all-components elem-name)) all-components)]
                   :group [(keyword elem-tag)
                           (extract-definition elem-content all-components)]
-                  (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type: " elem-type)))))))
+                  (throw (IllegalArgumentException. (str "Wrong input: component contains unknown type:" elem-type)))))))
        flatten))
 
 (defn- generate-source-file [components]
-  (println (str "Number of components found: " (count components)))
+  (info "Number of components found:" (count components))
   (let [gen-components (map
                             (fn [component]
                               (assert-component component)
-                              #_(println " ------------------ NEW COMPONENT ------------------")
                               (let [name (get-in component [:attrs :name])
                                     definition (extract-definition (:content component) components)
-                                    ordering (extract-ordering (:content component) components)] ;TODO remove definition -> ordering now contains all information
-                                #_(println (str "Name: " name " and Length: " (count definition)))
-                                #_(pprint ordering)
+                                    ordering (extract-ordering (:content component) components)]
                                 {(keyword name) {:ordering   ordering
                                                  :definition (into #{} definition)}}))
                             components)]
     (spit-to-file (apply merge gen-components))))
 
 (defn -main [& _]
-  (println "Generating FIX5.0 SP2 COMPONENT sources ... !")
+  (info "Generating FIX5.0 SP2 COMPONENT sources ... !")
   (let [[_ components _] (parser/parse "resources/FIX50SP2_FIXT11_combined.xml")]
     (generate-source-file components)))
-
-(-main)
