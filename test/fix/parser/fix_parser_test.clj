@@ -1,8 +1,7 @@
 (ns fix.parser.fix-parser-test
-  (:require [clojure.test :refer :all])
-  (:require [fix.parser.fix-parser :refer [parse]]))
-
-(def soh-delimiter (char 1))
+  (:require [clojure.test :refer :all]
+            [fix.parser.fix-parser :refer [parse]]
+            [fix.utils :refer [soh-delimiter]]))
 
 (deftest parser-test
   (testing "parser return correct map given valid input"

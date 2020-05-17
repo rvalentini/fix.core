@@ -126,7 +126,7 @@
                                   {:tag :56 :value "SellSide" :size 10}
                                   {:tag :34 :value "3" :size 3}
                                   {:tag :52 :value "20190605-12:45:24.919" :size 23}
-                                  {:tag :1128 :value 9 :size 5}
+                                  {:tag :1128 :value 9 :size 5} ;TODO should be string???
                                   {:tag :10 :value "064" :size 5}])))
   (testing "Complete FIX message validation for Heartbeat message type with :112 content"
     ;same message as above but with :112 content this time (body length and checksum adjusted)

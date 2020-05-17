@@ -1,10 +1,10 @@
 (ns fix.parser.fix-parser
   (:require [clojure.string :refer [split blank? includes?]]
-            [fix.utils :refer [parse-number]]
+            [fix.utils :refer [parse-number soh-delimiter]]
             [taoensso.timbre :refer [error info]])
   (:import (java.util.regex Pattern)))
 
-(def soh-delimiter (Pattern/compile (str (char 1))))
+(def soh-delimiter-rgx (Pattern/compile (str soh-delimiter)))
 (def equals #"=")
 
 (defn- is-tag? [arg]
@@ -30,7 +30,7 @@
   (assoc elem :size (+ (count (:tag elem)) (count (:value elem)))))
 
 (defn parse
-  ([msg] (parse msg soh-delimiter))
+  ([msg] (parse msg soh-delimiter-rgx))
   ([msg delimiter]
    (if (input-valid? msg delimiter)
      (let [parsed (->> (split msg delimiter)

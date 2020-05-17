@@ -2,6 +2,8 @@
   (:require [clojure.edn :as edn]
             [taoensso.timbre :refer [error]]))
 
+(def soh-delimiter (char 1))
+
 (defn parse-number [arg]
   (when (string? arg)
     (try

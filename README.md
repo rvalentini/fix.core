@@ -5,6 +5,40 @@ FIXME: description
 TODO:
 * Add description for `lein gen` -> code generation necessary when no definitions present
 
+
+;DONE (1) validate the actual key value pairs through the component check
+;TODO (2) test more complex message types
+;DONE (3) clean up logging with timbre -> extend to other namespaces
+;DONE (4) implement core (HERE) -> combine parse and msg/spec validation and think about which methods to open (tests!)
+;DONE (4) write parser for ASCII FIX and map correctly to current format used
+;DONE all values given for validation at field level are still raw string!!! make parsing with (edn/read-string) part of validation at lowest level
+;DONE (5) move duplications to util
+;DONE (6) throw out all old namespaces
+;TODO (6) remove test.edn
+;TODO (7) go through all remaining TODOS
+;TODO (8) remove debug (run-tests)
+;DONE (9) update lein dependencies and clj version
+;TODO (10) write nice README 
+     ;TODO which features? 
+     ;TODO how to use (require etc) with examples
+     ;TODO warning for Regex delimiters
+     ;TODO basic insights about FIX nested possibilities
+;TODO (11) publish on Clojars
+
+
+; component :content :attrs -> always "No..." of type NUMINGROUP == first field in group
+; component :content :content is array of all repeated fields -> multiple of NUMINGROUP
+
+; message > component > group -> group never directly part of message
+; component > group > component -> groups can contain components
+
+; components and fields can have the same name "DerivativeSecurityXML"
+
+; component definitions don't have "required" within top-level attrs -> only the usages have
+
+
+
+
 ## Installation
 
 Download from http://example.com/FIXME.

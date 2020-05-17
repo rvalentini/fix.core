@@ -80,7 +80,6 @@
 
 (spec/def ::message is-message?)
 
-;TODO error logs instead of exceptions: CAREFUL! not just exchangeable!
 
 
 

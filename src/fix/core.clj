@@ -1,80 +1,21 @@
 (ns fix.core
-  (:gen-class))
+  (:require [fix.parser.fix-parser :refer [parse]]
+            [fix.spec.message-spec :as m]
+            [clojure.spec.alpha :as s]))
 
-
-;;TODO NEXT:
-;;TODO (1) remove deprecated spec ns
-
-;;TODO (2) how to keep order and fast :tag access in groups? -> data within hashmap and separate vec for order
-;;TODO when the order is needed (e.g. Header/Trailer, repeating groups)
-;;TODO (3) how to handle repeating tags in hashmap? -> sub-maps repeating group as vec of maps
-
-(def message {:ordering [:345 :54 :9 :11]  ;keep ordering of tags in array
-              :data {:345 "some_stuff"
-                     :54  "some_other_stuff"
-                     :9   "Fred"
-                     :10 3
-                     :10-groups [{:8 "A" :4 "B"} ;;TODO could be repeating group --- does TAG ":11" exist for this context? maybe introcude :11-groups []
-                                 {:8 "C" :4 "D"}
-                                 {:8 "E" :4 "F"}]}})
-
-; component :content :attrs -> always "No..." of type NUMINGROUP == first field in group
-; component :content :content is array of all repeated fields -> multiple of NUMINGROUP
-
-; message > component > group -> group never directly part of message
-; component > group > component -> groups can contain components
-
-; components and fields can have the same name "DerivativeSecurityXML"
-
-; component definitions don't have "required" within top-level attrs -> only the usages have
-
-;TODO can groups contain other groups ??? -> otherwise "recur" in components when 2nd level component appears
-
-
-
-
-
-;insights:
-
-; FIX messages will be flat in the end
-; FIX message is a sequence of key value pairs
-
-;TODO big picture implementation
-
-
-;DONE (1) validate the actual key value pairs through the component check
-;TODO (2) test more complex message types
-;DONE (3) clean up logging with timbre -> extend to other namespaces
-;TODO (4) implement core (HERE) -> combine parse and msg/spec validation and think about which methods to open (tests!)
-;DONE (4) write parser for ASCII FIX and map correctly to current format used
-;DONE all values given for validation at field level are still raw string!!! make parsing with (edn/read-string) part of validation at lowest level
-;DONE (5) move duplications to util
-;DONE (6) throw out all old namespaces
-;TODO (6) remove test.edn
-;TODO (7) go through all remaining TODOS
-;TODO (8) remove debug (run-tests)
-;DONE (9) update lein dependencies and clj version
-;TODO (10) write nice README
-;TODO (11) publish on Clojars
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+(defn valid?
+  "This function validates the syntactical correctness of [FIX protocol]
+  (https://en.wikipedia.org/wiki/Financial_Information_eXchange) messages. The `msg` must be given as a single
+  `String` parameter. By default, the SOH control code (ASCII 01) is used as delimiter,
+  which separates the individual tag value pairs. As optional second parameter `delimiter`, a custom delimiter
+  can be used. The function returns `true` if the given message is syntactically correct, `false` otherwise.
+  The function validates the syntactical correctness of header and trailer of the message first. Then the body of the
+  message is validated with regard to the particular message type. Although the `msg` is given as a flat sequence of
+  tag value pairs, the validation takes into account that the body of the message can potentially represent heavily
+  nested structures of `COMPONENTS` and `GROUPS`. E.g. An incorrect `NUMINGROUP` field that indicates the numbers of
+  repetitions within a `GROUP` would result in an invalid message, although the individual `GROUP` repetitions might
+  very well be syntactically correct. For a more detailed explanation of the validation features see
+  [fix.core](https://github.com/rvalentini/fix.core).
+  The only supported protocol version is currently FIX 5.0 SP2"
+  ([msg] (s/valid? ::m/message (parse msg)))
+  ([msg delimiter] (s/valid? ::m/message (parse msg delimiter))))
