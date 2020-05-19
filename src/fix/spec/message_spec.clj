@@ -30,6 +30,12 @@
                        (drop 1 (seq (str a)))
                        (seq (str a))))))
 
+(defn- valid-start-of-header? [head]
+     (and (>= (count head) 3)
+          (= (:tag (first head)) :8)
+          (= (:tag (second head)) :9)
+          (= (:tag (nth head 2)) :35)))
+
 (defn evaluate-header [head seq]
   "Extracts and validates the FIX <StandardHeader> component block.
    If the validation is successful the method returns the message name, otherwise nil
@@ -45,6 +51,7 @@
                                (filter #((:tag %) #{:8 :9 :35}))
                                (reduce #(assoc %1 (:tag %2) (:value %2)) {}))]
         (and
+          (valid-start-of-header? head)
           (contains? supported-versions (:8 relevant-tags))
           (valid-body-length? seq (:9 relevant-tags))
           (if-let [msg-name (get-message-name-by-type (:35 relevant-tags))]

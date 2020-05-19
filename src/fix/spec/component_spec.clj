@@ -6,7 +6,6 @@
 
 (declare matching-component?)
 
-;TODO check if the num-in-group tag is actually of type NUMINGROUP
 (defn- get-num-in-group-count [[given-head & _] [num-in-group & _]]
   (if (and (= (:tag given-head) (:tag num-in-group))
            (pos-int? (:value given-head)))
@@ -17,12 +16,30 @@
   (when (and (:required comp) (every? #(not (:required %)) (:ordering comp)))
     (warn "Required component without any required fields: " (:name comp))))
 
-
 (defn- matching-field? [e1 e2]
   (debug "--- MATCHING FIELD ---")
   (debug "Comparing the field tags:" (:tag e1) "==" (:tag e2))
   (= (:tag e1) (:tag e2)))
 
+(defn- extract-index [seq e]
+  (.indexOf (map :tag seq) (:tag e)))
+
+(defn- is-field-out-of-order? [seq-a seq-b within-group]
+  (and (not= (extract-index seq-b (first seq-a)) -1) ;do not consider ooo when it's not the same component depth
+       (not= (extract-index seq-a (first seq-b)) -1)
+       (not within-group))) ;do not consider ooo when field is within a group
+
+(defn- switch-indices [seq idx1 idx2]
+  (if (= idx1 idx2)
+    seq
+    (let [idx1-elem (nth seq idx1 nil)
+          idx2-elem (nth seq idx2 nil)]
+      (if (and (some? idx1-elem) (some? idx2-elem))
+        (-> (assoc seq idx1 idx2-elem)
+            (assoc idx2 idx1-elem))
+        (do
+          (debug "Cannot switch indices: Index out of bounds: " idx1 "," idx2)
+          nil)))))
 
 (defn- matching-group? [seq group deep-eval]
   (debug "--- MATCHING GROUP ---")
@@ -30,13 +47,12 @@
   (loop [num-in-group (get-num-in-group-count seq (:ordering group))
          given-seq (vec (drop 1 seq))
          group-content-as-component {:ordering (second (:ordering group))}]
-    (if-let [result (matching-component? given-seq group-content-as-component false deep-eval)]
+    (if-let [result (matching-component? given-seq group-content-as-component false deep-eval true)]
       (if (false? num-in-group)
         (cond
           (true? result) true
           (seq? result) (do
-                          (error "Missing num-in-group definition for repeating values for group"
-                                 (:tag (first (:ordering group))))
+                          (error "Missing num-in-group definition for repeating values for group" (:tag (first (:ordering group))))
                           false))
         (let [final-iteration (= num-in-group 1)]
           (cond
@@ -53,11 +69,11 @@
   (debug "--- MATCHING SUB-COMPONENT ---")
   (debug "Sub-component match called with:" seq "and" component)
   (required-component-without-required-fields? component)
-  (matching-component? seq component false deep-eval))
+  (matching-component? seq component false deep-eval false))
 
 (defn matching-component?
-  ([given component] (matching-component? given component true true))
-  ([given component is-root-call deep-eval]
+  ([given component] (matching-component? given component true true false))
+  ([given component is-root-call deep-eval within-group]
    (debug "--- MATCHING COMPONENT ---")
    (debug "Matching component called with:" given "and" component)
    (loop [seq-a given
@@ -69,18 +85,20 @@
                    [b & b-tail] seq-b]
                (if (= :field (:type b))
                  (if (matching-field? a b)
-                   (if (or (spec/valid? ::f/field a)(not deep-eval))
+                   (if (or (spec/valid? ::f/field a) (not deep-eval))
                      (recur a-tail b-tail)
                      (do
                        (error "Field is invalid:" a)
                        false))
-                   (if (not (:required b))
-                     (do
-                       (debug "Field is not required:" b)
-                       (recur seq-a b-tail))
-                     (do
-                       (error "Field tag does not match the definition:" (:tag a) "vs" (:tag b))
-                       false)))
+                   (if (is-field-out-of-order? seq-a seq-b within-group)
+                     (recur (switch-indices (vec seq-a) 0 (extract-index seq-a b)) seq-b)
+                     (if (not (:required b))
+                       (do
+                         (debug "Field is not required:" b)
+                         (recur seq-a b-tail))
+                       (do
+                         (error "Field tag does not match the definition:" (:tag a) "vs" (:tag b))
+                         false))))
                  (if-let [a-rest (case (:type b)
                                    :group (matching-group? seq-a b deep-eval)
                                    :component (matching-sub-component? seq-a b deep-eval))]

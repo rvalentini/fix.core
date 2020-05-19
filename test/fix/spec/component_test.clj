@@ -3,31 +3,30 @@
             [clojure.spec.alpha :as spec]
             [fix.spec.component-spec :as c :refer [matching-component?]]))
 
-
 (deftest simple-component-spec-test
   (testing "Basic sequence matching logic for field only components is working correctly"
     (is (matching-component? [{:tag :1, :value "some-value"}]
                              {:ordering [{:tag      :1
                                           :required true
                                           :type     :field}]}
-                             true false))
+                             true false false))
     (is (matching-component? [{:tag :1, :value "some-value"}]
                              {:ordering [{:tag      :1
                                           :required true
                                           :type     :field}]}
-                             true false))
+                             true false false))
     (is (not (matching-component? [{:tag :1, :value "some-value"}]
                                   {:ordering [{:tag      :2
                                                :required false
                                                :type     :field}]}
-                                  true false)))
+                                  true false false)))
     (is (not (matching-component? [{:tag :1, :value "some-value"}]
                                   {:ordering [{:tag      :2
                                                :required true
                                                :type     :field}]}
-                                  true false)))
-    (is (matching-component? [] {:ordering []} true false))
-    (is (not (matching-component? [{:tag :x, :value "some-value"}] {:ordering []} true false)))
+                                  true false false)))
+    (is (matching-component? [] {:ordering []} true false false))
+    (is (not (matching-component? [{:tag :x, :value "some-value"}] {:ordering []} true false false)))
     (is (not (matching-component? [{:tag :1, :value "some-value"}
                                    {:tag :3, :value "some-value"}]
                                   {:ordering [{:tag      :x
@@ -42,7 +41,7 @@
                                               {:tag      :3
                                                :required true
                                                :type     :field}]}
-                                  true false)))
+                                  true false false)))
     (is (matching-component? [{:tag :1, :value "some-value"}
                               {:tag :3, :value "some-value"}]
                              {:ordering [{:tag      :x
@@ -57,7 +56,7 @@
                                          {:tag      :3
                                           :required true
                                           :type     :field}]}
-                             true false))
+                             true false false))
     )
 
   (testing "Tags that are not contained in the definition/seq will fail the matching"
@@ -74,7 +73,7 @@
                                               {:tag      :3
                                                :required true
                                                :type     :field}]}
-                                  true false)))
+                                  true false false)))
     (is (not (matching-component? [{:tag :X, :value "some-value"}]
                                   {:ordering [{:tag      :1
                                                :required true
@@ -85,19 +84,19 @@
                                               {:tag      :3
                                                :required true
                                                :type     :field}]}
-                                  true false)))
-    (is (not (matching-component? [{:tag :X, :value "some-value"}] {:ordering []} true false))))
+                                  true false false)))
+    (is (not (matching-component? [{:tag :X, :value "some-value"}] {:ordering []} true false false))))
 
 
   (testing "Potentially successful matching for given tag sequence will still fail, when there are mandatory tags missing"
     (is (matching-component? [] {:ordering [{:tag      :b
                                              :required false
                                              :type     :field}]}
-                             true false))
+                             true false false))
     (is (not (matching-component? [] {:ordering [{:tag      :b
                                                   :required true
                                                   :type     :field}]}
-                                  true false)))
+                                  true false false)))
     (is (not (matching-component? [{:tag :a, :value "some-value"}
                                    {:tag :b, :value "some-value"}
                                    {:tag :c, :value "some-value"}]
@@ -113,7 +112,7 @@
                                               {:tag      :d
                                                :required true
                                                :type     :field}]}
-                                  true false)))
+                                  true false false)))
     (is (matching-component? [{:tag :a, :value "some-value"}
                               {:tag :b, :value "some-value"}
                               {:tag :c, :value "some-value"}]
@@ -129,7 +128,7 @@
                                          {:tag      :d
                                           :required false
                                           :type     :field}]}
-                             true false))))
+                             true false false))))
 
 
 (deftest nested-component-spec-test
@@ -165,7 +164,7 @@
                                             :required true
                                             :type     :field}]}]}
 
-                             true false))
+                             true false false))
 
     (is (matching-component? [{:tag :a, :value "some-value"}
                               {:tag :b, :value "some-value"}
@@ -214,7 +213,7 @@
                                             :required true
                                             :type     :field}]}]}
 
-                             true false))
+                             true false false))
 
     (is (matching-component? [{:tag :a, :value "some-value"}
                               {:tag :b, :value "some-value"}
@@ -271,7 +270,7 @@
                                             :required true
                                             :type     :field}]}]}
 
-                             true false))
+                             true false false))
 
     (is (not (matching-component? [{:tag :a, :value "some-value"}
                                    {:tag :b, :value "some-value"}
@@ -329,7 +328,7 @@
                                                  :required true
                                                  :type     :field}]}]}
 
-                                  true false)))
+                                  true false false)))
 
     (is (matching-component? [{:tag :a, :value "some-value"}
                               {:tag :c, :value "some-value"}
@@ -394,7 +393,7 @@
                                             :required true
                                             :type     :field}]}]}
 
-                             true false))))
+                             true false false))))
 
 
 (deftest basic-group-spec-test
@@ -414,7 +413,7 @@
                                             {:tag :1617, :required true, :type :field}
                                             {:tag :1500, :required true, :type :field}
                                             {:tag :1502, :required true, :type :field}]]}]}
-                             true false))
+                             true false false))
 
     (is (matching-component? [{:tag :146 :value 2}
                               {:tag :63 :value "some-value"}
@@ -430,7 +429,7 @@
                                            [{:tag :63, :required true, :type :field}
                                             {:tag :1617, :required true, :type :field}
                                             ]]}]}
-                             true false))
+                             true false false))
 
     (is (not (matching-component? [{:tag :146 :value 2}
                                    {:tag :63 :value "some-value"}
@@ -446,7 +445,7 @@
                                                 [{:tag :63, :required true, :type :field}
                                                  {:tag :1617, :required true, :type :field}
                                                  ]]}]}
-                                  true false)))
+                                  true false false)))
 
     ;146 is NUMINGROUP which must be pos-int, so 0 is not valid
     (is (not (matching-component? [{:tag :146 :value 0}]
@@ -458,7 +457,7 @@
                                                           [{:tag :63, :required true, :type :field}
                                                            {:tag :1617, :required true, :type :field}
                                                            ]]}]}
-                                  true false)))))
+                                  true false false)))))
 
 
 (deftest complex-nested-group-spec-test
@@ -529,7 +528,7 @@
                                             {:tag :542, :required true, :type :field}]]}
                                {:tag :891, :required true, :type :field}]}
 
-                             true false))
+                             true false false))
 
     (is (matching-component? [{:tag :889 :value "some-value"}
                               {:tag :890 :value "some-value"}
@@ -575,7 +574,7 @@
                                              :required true
                                              :name     "TestComponentA"
                                              :ordering
-                                                       [{:tag      :c1
+                                                       [{:tag      :c1 ;TODO error here
                                                          :required false ;NOT REQUIRED anymore
                                                          :type     :field}
                                                         {:type     :group,
@@ -591,7 +590,7 @@
                                             {:tag :542, :required true, :type :field}]]}
                                {:tag :891, :required true, :type :field}]}
 
-                             true false))
+                             true false false))
 
     (is (not (matching-component? [{:tag :889 :value "some-value"}
                                    {:tag :890 :value "some-value"}
@@ -653,7 +652,7 @@
                                                  {:tag :542, :required true, :type :field}]]}
                                     {:tag :891, :required true, :type :field}]}
 
-                                  true false)))))
+                                  true false false)))))
 
 (deftest component-spec-facade
   (testing "Invoking the matching logic via the component spec/def is working as intended"
@@ -668,7 +667,6 @@
                        {:tag :52 :value "20190202-01:00:00"}
                        {:tag :347 :value "some-very-fancy-encoding"}]
                       :Header]))))
-
 
 
 (run-tests)
