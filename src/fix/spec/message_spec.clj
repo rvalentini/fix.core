@@ -19,11 +19,14 @@
     (error "Unknown message type:" type)))
 
 (defn- valid-body-length? [[_ _ & rest] length-in-bytes]
-  (let [without-checksum (drop-last rest)]
+  (let [without-checksum (drop-last rest)
+        checksum-actual (+ (* 2 (count without-checksum) 1) ;all '=' and delimiters
+                           (reduce #(+ %1 (:size %2)) 0 without-checksum))
+        checksum-given (parse-number length-in-bytes)]
     (or
-      (= (+ (* 2 (count without-checksum) 1)                ;all '=' and delimiters
-            (reduce #(+ %1 (:size %2)) 0 without-checksum)) (parse-number length-in-bytes))
-      (error "Header evaluation failed: body length is invalid!"))))
+      (= checksum-actual checksum-given)
+      (error "Header evaluation failed: body length is invalid! Body length given:"
+             checksum-given " vs actual body length:" checksum-actual))))
 
 (defn- to-bytes [a]
   (reduce + (map int (if (keyword? a)
@@ -31,10 +34,10 @@
                        (seq (str a))))))
 
 (defn- valid-start-of-header? [head]
-     (and (>= (count head) 3)
-          (= (:tag (first head)) :8)
-          (= (:tag (second head)) :9)
-          (= (:tag (nth head 2)) :35)))
+  (and (>= (count head) 3)
+       (= (:tag (first head)) :8)
+       (= (:tag (second head)) :9)
+       (= (:tag (nth head 2)) :35)))
 
 (defn evaluate-header [head seq]
   "Extracts and validates the FIX <StandardHeader> component block.
@@ -68,11 +71,13 @@
    "
   (if-not (= :10 (:tag (last seq)))
     (error "Trailer evaluation failed: trailer section does not contain any checksum!")
-    (let [checksum (Integer/parseInt (:value (last seq)))
+    (let [checksum-given (Integer/parseInt (:value (last seq)))
           sum-bytes (reduce #(+ %1 (to-bytes (:tag %2)) (to-bytes (:value %2))) 0 (drop-last seq))
           sum-delimiters (count (drop-last seq))
-          sum-equal-symbols (* (count (drop-last seq)) (int \=))]
-      (= checksum (mod (+ sum-bytes sum-delimiters sum-equal-symbols) 256)))))
+          sum-equal-symbols (* (count (drop-last seq)) (int \=))
+          checksum-actual (mod (+ sum-bytes sum-delimiters sum-equal-symbols) 256)]
+      (debug "Message checksum given" checksum-given "vs. calculated checksum:" checksum-actual)
+      (= checksum-given checksum-actual))))
 
 (defn- is-message? [seq]
   (let [[head body _] (destructure-msg seq)]
@@ -81,12 +86,11 @@
         (do
           (debug "Header and Trailer valid! Continuing with body validation for msg-type:" msg-name)
           (let [message (:ordering (msg-name m/messages))
-                as-component {:ordering (map #(if (keyword? %) (:odering (% c/components)) %) message)}]
+                as-component {:ordering (map #(if (= (:type %) :component)
+                                                (assoc % :ordering [(:ordering ((:name %) c/components))])
+                                                %) message)}]
+            (println "AS:COMP: " as-component)
             (spec/valid? ::s/component [body as-component])))
         (error "Trailer evaluation failed: checksum is not correct!")))))
 
 (spec/def ::message is-message?)
-
-
-
-

@@ -17,11 +17,14 @@
 ;TODO code duplication move to util or similar
 (defn- build-field [field-attrs field-content]
   (c/assert-empty-content field-content)
-  (let [field-tag (c/get-field-tag-by-name (:name field-attrs))
-        required (c/char->boolean (:required field-attrs))]
-    {:tag field-tag
-     :required required
-     :type :field}))
+  {:tag      (c/get-field-tag-by-name (:name field-attrs))
+   :required (c/char->boolean (:required field-attrs))
+   :type     :field})
+
+(defn- build-component [comp-name attrs]
+  {:type     :component
+   :required (c/char->boolean (:required attrs))
+   :name     (keyword comp-name)})
 
 (defn- extract-ordering [content]
   (->> content
@@ -32,7 +35,7 @@
                     elem-content (:content elem)]
                 (case elem-type
                   :field (build-field attrs elem-content)
-                  :component (keyword elem-name)))))))
+                  :component (build-component elem-name attrs)))))))
 
 (defn- generate-source-file [messages]
   (info "Number of messages found:" (count messages))

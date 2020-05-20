@@ -164,10 +164,39 @@
                                        {:tag :1128 :value "9" :size 5}
                                        {:tag :56 :value "SellSide" :size 10}
                                        {:tag :112 :value "some-test-id" :size 15}
-                                       {:tag :10 :value "172" :size 5}])))))
+                                       {:tag :10 :value "172" :size 5}]))))
+
+  (testing "Complete FIX message validation for NewOrderSingle message"
+    (is (spec/valid? ::m/message [{:tag :8 :value "FIXT.1.1" :size 9}
+                                  {:tag :9 :value "237" :size 3}
+                                  {:tag :35 :value "D" :size 3}
+                                  {:tag :49 :value "myAwsomeComp" :size 14}
+                                  {:tag :56 :value "yourAwesomeComp" :size 17}
+                                  {:tag :52 :value "20200605-12:45:24.919" :size 23}
+                                  {:tag :34 :value "1" :size 3}
+                                  {:tag :115 :value "aThirdAwesomeComp" :size 20}
+                                  {:tag :11 :value "id394850345de" :size 15}
+                                  {:tag :1 :value "acc1" :size 5}
+                                  {:tag :18 :value "l m p" :size 7}
+                                  {:tag :55 :value "[N/A]" :size 7}
+                                  {:tag :460 :value "5" :size 4}
+                                  {:tag :167 :value "CS" :size 5}
+                                  {:tag :470 :value "GB" :size 5}
+                                  {:tag :48 :value "AMZN" :size 6}
+                                  {:tag :22 :value "8" :size 3}
+                                  {:tag :54 :value "1" :size 3}
+                                  {:tag :60 :value "20200605-12:45:24.919" :size 23}
+                                  {:tag :38 :value "3000" :size 6}
+                                  {:tag :40 :value "4" :size 3}
+                                  {:tag :44 :value "462.49" :size 8}
+                                  {:tag :99 :value "430.00" :size 8}
+                                  {:tag :15 :value "CHF" :size 5}
+                                  {:tag :10 :value "230" :size 5}]))))
+
 
 
 ;(message-spec-header-test)
-(run-tests)
+;(latest)
 ;(complete-message-spec-test)
 ;(checksum-calculation-test)
+(run-tests)
