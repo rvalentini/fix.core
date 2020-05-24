@@ -65,12 +65,3 @@
         (spec/valid? type value)))))
 
 (spec/def ::field (spec/and key-value? field?))
-
-
-
-
-
-
-
-
-

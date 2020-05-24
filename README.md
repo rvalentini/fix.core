@@ -7,16 +7,16 @@ TODO:
 
 
 ;DONE (1) validate the actual key value pairs through the component check
-;TODO (2) test more complex message types
+;DONE (2) test more complex message types
 ;DONE (3) clean up logging with timbre -> extend to other namespaces
 ;DONE (4) implement core (HERE) -> combine parse and msg/spec validation and think about which methods to open (tests!)
 ;DONE (4) write parser for ASCII FIX and map correctly to current format used
 ;DONE all values given for validation at field level are still raw string!!! make parsing with (edn/read-string) part of validation at lowest level
 ;DONE (5) move duplications to util
 ;DONE (6) throw out all old namespaces
-;TODO (6) remove test.edn
-;TODO (7) go through all remaining TODOS
-;TODO (8) remove debug (run-tests)
+;DONE (6) remove test.edn
+;DONE (7) go through all remaining TODOS
+;DONE (8) remove debug (run-tests)
 ;DONE (9) update lein dependencies and clj version
 ;TODO (10) write nice README 
      ;TODO which features? 

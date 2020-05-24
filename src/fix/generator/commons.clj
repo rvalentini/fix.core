@@ -26,4 +26,10 @@
       (throw (NoSuchElementException. (str "Field" field-name "does not exist!")))
       (first matches))))
 
+(defn build-field [field-attrs field-content]
+  (assert-empty-content field-content)
+  {:tag      (get-field-tag-by-name (:name field-attrs))
+   :required (char->boolean (:required field-attrs))
+   :type     :field})
+
 

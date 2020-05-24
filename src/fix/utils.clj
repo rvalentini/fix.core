@@ -10,3 +10,8 @@
       (edn/read-string arg)
       (catch NumberFormatException e
         (error e "Cannot parse field value:" arg "is not a number!")))))
+
+(defn flatten-seq [arg]
+  (if (and (sequential? arg) (= (count arg) 1) (sequential? (first arg)))
+    (first arg)
+    (vec arg)))

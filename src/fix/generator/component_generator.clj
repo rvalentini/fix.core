@@ -14,14 +14,6 @@
     (spit "src/fix/definitions/components.clj" "\n\n" :append true)
     (spit "src/fix/definitions/components.clj" var :append true)))
 
-(defn- build-field [field-attrs field-content]
-  (c/assert-empty-content field-content)
-  (let [field-tag (c/get-field-tag-by-name (:name field-attrs))
-        required (c/char->boolean (:required field-attrs))]
-    {:tag field-tag
-     :required required
-     :type :field}))
-
 (defn- flatten-vec-of-vec [arg]
   (if (and (sequential? arg) (= (count arg) 1))
     (first arg)
@@ -36,7 +28,7 @@
                     elem-content (:content elem)
                     elem-tag (c/get-field-tag-by-name (:name attrs))]
                 (case elem-type
-                  :field (build-field attrs elem-content)
+                  :field (c/build-field attrs elem-content)
                   :component {:type     :component
                               :required (c/char->boolean (:required attrs))
                               :name     (keyword elem-name)

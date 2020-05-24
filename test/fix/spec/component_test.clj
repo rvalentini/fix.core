@@ -574,7 +574,7 @@
                                              :required true
                                              :name     "TestComponentA"
                                              :ordering
-                                                       [{:tag      :c1 ;TODO error here
+                                                       [{:tag      :c1
                                                          :required false ;NOT REQUIRED anymore
                                                          :type     :field}
                                                         {:type     :group,
@@ -667,7 +667,3 @@
                        {:tag :52 :value "20190202-01:00:00"}
                        {:tag :347 :value "some-very-fancy-encoding"}]
                       :Header]))))
-
-
-(run-tests)
-;(complex-nested-group-spec-test)

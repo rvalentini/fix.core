@@ -14,13 +14,6 @@
     (spit "src/fix/definitions/messages.clj" "\n\n" :append true)
     (spit "src/fix/definitions/messages.clj" var :append true)))
 
-;TODO code duplication move to util or similar
-(defn- build-field [field-attrs field-content]
-  (c/assert-empty-content field-content)
-  {:tag      (c/get-field-tag-by-name (:name field-attrs))
-   :required (c/char->boolean (:required field-attrs))
-   :type     :field})
-
 (defn- build-component [comp-name attrs]
   {:type     :component
    :required (c/char->boolean (:required attrs))
@@ -34,7 +27,7 @@
                     elem-name (:name attrs)
                     elem-content (:content elem)]
                 (case elem-type
-                  :field (build-field attrs elem-content)
+                  :field (c/build-field attrs elem-content)
                   :component (build-component elem-name attrs)))))))
 
 (defn- generate-source-file [messages]

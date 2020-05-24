@@ -94,10 +94,7 @@
             [{:tag :1111 :value "some-msg-body" :size 13}]
             [{:tag :93 :value "111" :size 3}
              {:tag :89 :value "some-signature" :size 14}
-             {:tag :10 :value "some-checksum" :size 13}]]))
-
-    ))
-
+             {:tag :10 :value "some-checksum" :size 13}]]))))
 
 (deftest message-spec-header-test
   (testing "StandardHeader component is extracted and validated correctly"
@@ -112,10 +109,6 @@
                {:tag :10 :value "some-checksum" :size 15}]
           [head _ _] (m/destructure-msg seq)]
       (is (m/evaluate-header head seq)))))
-
-
-;TODO test actual message spec end-2-end
-;TODO test out of order body tags
 
 (deftest complete-message-spec-test
   (testing "Complete FIX message validation for empty Heartbeat message type"
@@ -166,7 +159,7 @@
                                        {:tag :112 :value "some-test-id" :size 15}
                                        {:tag :10 :value "172" :size 5}]))))
 
-  (testing "Complete FIX message validation for NewOrderSingle message"
+  (testing "Complete FIX message validation for NewOrderSingle message with mixed tag ordering"
     (is (spec/valid? ::m/message [{:tag :8 :value "FIXT.1.1" :size 9}
                                   {:tag :9 :value "237" :size 3}
                                   {:tag :35 :value "D" :size 3}
@@ -192,11 +185,3 @@
                                   {:tag :99 :value "430.00" :size 8}
                                   {:tag :15 :value "CHF" :size 5}
                                   {:tag :10 :value "230" :size 5}]))))
-
-
-
-;(message-spec-header-test)
-;(latest)
-;(complete-message-spec-test)
-;(checksum-calculation-test)
-(run-tests)

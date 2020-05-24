@@ -20,5 +20,3 @@
     (is (spec/valid? ::fs/field {:tag :277 :value "4 3"}))
     (is (spec/valid? ::fs/field {:tag :277 :value "w T d z AH"}))
     (is (not (spec/valid? ::fs/field {:tag :277 :value "Ah"})))))
-
-(run-tests)                                                 ;TODO remove

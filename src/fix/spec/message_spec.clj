@@ -89,7 +89,6 @@
                 as-component {:ordering (map #(if (= (:type %) :component)
                                                 (assoc % :ordering [(:ordering ((:name %) c/components))])
                                                 %) message)}]
-            (println "AS:COMP: " as-component)
             (spec/valid? ::s/component [body as-component])))
         (error "Trailer evaluation failed: checksum is not correct!")))))
 

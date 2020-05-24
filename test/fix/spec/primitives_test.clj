@@ -129,5 +129,3 @@
     (is (spec/valid? ::p/multiple-string-value "tt f r d"))
     (is (spec/valid? ::p/multiple-string-value "1 2 3"))
     (is (spec/valid? ::p/multiple-string-value "aa//bh ZH;:[[ZH6 ss"))))
-
-(run-tests)                                                 ;TODO remove
