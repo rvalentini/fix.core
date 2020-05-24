@@ -1,29 +1,15 @@
 # fix.core
 
-FIXME: description
-
-TODO:
-* Add description for `lein gen` -> code generation necessary when no definitions present
+Financial Information eXchange (FIX) protocol validator using clojure.spec <br/>
 
 
-;DONE (1) validate the actual key value pairs through the component check
-;DONE (2) test more complex message types
-;DONE (3) clean up logging with timbre -> extend to other namespaces
-;DONE (4) implement core (HERE) -> combine parse and msg/spec validation and think about which methods to open (tests!)
-;DONE (4) write parser for ASCII FIX and map correctly to current format used
-;DONE all values given for validation at field level are still raw string!!! make parsing with (edn/read-string) part of validation at lowest level
-;DONE (5) move duplications to util
-;DONE (6) throw out all old namespaces
-;DONE (6) remove test.edn
-;DONE (7) go through all remaining TODOS
-;DONE (8) remove debug (run-tests)
-;DONE (9) update lein dependencies and clj version
-;TODO (10) write nice README 
+TODO include clojar tag
+TODO (10) write nice README 
      ;TODO which features? 
      ;TODO how to use (require etc) with examples
      ;TODO warning for Regex delimiters
      ;TODO basic insights about FIX nested possibilities
-;TODO (11) publish on Clojars
+TODO (11) publish on Clojars
 
 
 ; component :content :attrs -> always "No..." of type NUMINGROUP == first field in group
@@ -37,13 +23,53 @@ TODO:
 ; component definitions don't have "required" within top-level attrs -> only the usages have
 
 
+## Features
 
+Validation features:
+* Complete StandardHeader validation including "fixed ordering" tags like BeginString, BodyLength, MessageType
+* Complete StandardTrailer validation including checksum calculation
+* Data type of every single tag included in the message is checked: e.g. UTCDateOnly, TZTimeOnly, Country, MultipleCharValue ... 
+* Allowed enums for tag values are considered: e.g. some allowed values for the field ExecInst (18): <br/>
+7 = Strict scale <br/>
+B = OK to cross <br/>
+G = All or none - AON <br/>
+j = Single execution requested for block trade
+* Distinguishes between required/non-required fields according to the component definition
+* Deep message validation: according to the message type definition specified through the tag MessageType (:35), 
+the message can contain nested combinations of components and groups. The validation is executed according to this 
+nested structure. Fields that are contained in an embedded component or group are validated in their respective context,
+meaning that possible field repetitions are evaluated with repect to their surrounding structures. 
+* Group validation considers the preceding num-in-group field, which defines the numbers of repetitions of the proceeding group. 
+A divergence between the num-in-group count and the actual number of repetitions will fail the validation.
+* The ordering of tags is considered arbitrary for fields of the same component (this might not be 100% accurate in all possible cases!),
+but fixed for the fields of the same group.
+* In case of invalid messages, a (hopefully helpful) log statement indicates the reason why the validation failed.
+
+TODO forgot some feature?
+
+
+Note: The validation FIX message validation functionality provided in this library does not 
+cover 100% of all restrictions defined within the FIX protocol: some requirements are on ..............
+
+TODO
+example for the above:
+l = Suspend on system failure (mutually exclusive with H and Q)
+m = Suspend on Trading Halt (mutually exclusive with J and K)
+n = Reinstate on connection loss (mutually exclusive with o and p)
+o = Cancel on connection loss (mutually exclusive with n and p)
+
+
+## Generating FIX Definitions
+
+ Add description for `lein gen` -> code generation necessary when no definitions present
 
 ## Installation
 
 Download from http://example.com/FIXME.
 
 ## Usage
+How to include lib?
+Calling example
 
 FIXME: explanation
 
@@ -61,9 +87,7 @@ FIXME: listing of options this app accepts.
 
 ...
 
-### Any Other Sections
-### That You Think
-### Might be Useful
+
 
 ## License
 

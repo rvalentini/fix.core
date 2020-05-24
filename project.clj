@@ -5,10 +5,8 @@
             :url "http://www.eclipse.org/legal/epl-v20.html"}
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [com.taoensso/timbre "4.10.0"]]
-  :main ^:skip-aot fix.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}
-             :gen-fields     {:main ^:skip-aot fix.generator.field-generator}
+  :profiles {:gen-fields     {:main ^:skip-aot fix.generator.field-generator}
              :gen-components {:main ^:skip-aot fix.generator.component-generator}
              :gen-messages {:main ^:skip-aot fix.generator.message-generator}}
   :aliases {"gen-fields" ["with-profile" "gen-fields" "run"]
