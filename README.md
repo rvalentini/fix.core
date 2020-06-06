@@ -2,13 +2,21 @@
 
 Financial Information eXchange (FIX) protocol validator using clojure.spec <br/>
 
+## What is FIX?
 
--> What is FIX?
--> How can this validator be used with FIX? (debugging mostly)
+The Financial Information eXchange protocol is an open source communications protocol for the real-time exchange of 
+financial information. It is broadly used by financial institutions and other financial market actors to trade securities. 
+FIX is the standard electronic protocol for financial trade executions worldwide. 
 
+The message format defined by the protocol is called "tagvalue", which is basically a sequence of ASCII encoded key-value
+pairs delimited by a special SOH control character. The binary wire format for FIX messages is called "Simple Binary Encoding", 
+which is exchanged via TCP-socket connections between parties. 
+  
+The FIX protocol standard is defined and maintained by the "FIX Trading Community Organization" (see 
+https://www.fixtrading.org/online-specification/introduction/ for more details about the FIX protocol and
+https://www.fixtrading.org/standards/fix-5-0-sp-2/ for the actual FIX protocol definitions)
 
-TODO where can the definitions be found? FIX homepage
-TODO why section?
+## Why building a FIX message validator?
 
 
 TODO include clojar tag
@@ -44,12 +52,11 @@ A divergence between the num-in-group count and the actual number of repetitions
 but fixed for the fields of the same group.
 * In case of invalid messages, a (hopefully helpful) log statement indicates the reason why the validation failed.
 
-TODO forgot some feature?
 
-Note: The individual definitions for components, groups and fields are programmatically extracted from XML source files,
+***Note***: The individual definitions for components, groups and fields are programmatically extracted from XML source files,
 which can be found at https://github.com/quickfix/quickfix/tree/master/spec
 
-Note: The FIX message validation functionality provided in this library does not 
+***Note***: The FIX message validation functionality provided in this library does not 
 cover 100% of all restrictions defined in the original FIX protocol! Some field specific restrictions, which are
 mentioned within the comments/description section cannot be extracted programmatically and are therefore not included
 in the validation: 
