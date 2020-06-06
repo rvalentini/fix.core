@@ -15,3 +15,9 @@
   (if (and (sequential? arg) (= (count arg) 1) (sequential? (first arg)))
     (first arg)
     (vec arg)))
+
+(defn fix->str [msg delimiter]
+  (reduce
+    (fn [acc i]
+      (str acc (name (:tag i)) "=" (:value i) (when (not= (:tag i) :10) delimiter)))
+    "" msg))

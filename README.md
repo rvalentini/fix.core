@@ -2,6 +2,11 @@
 
 Financial Information eXchange (FIX) protocol validator using clojure.spec <br/>
 
+
+-> What is FIX?
+-> How can this validator be used with FIX? (debugging mostly)
+
+
 TODO where can the definitions be found? FIX homepage
 TODO why section?
 
@@ -9,21 +14,10 @@ TODO why section?
 TODO include clojar tag
 TODO (10) write nice README 
      ;TODO which features? 
-     ;TODO how to use (require etc) with examples
-     ;TODO warning for Regex delimiters
+     ;DONE how to use (require etc) with examples
+     ;DONE warning for Regex delimiters
      ;TODO basic insights about FIX nested possibilities
 TODO (11) publish on Clojars
-
-
-; component :content :attrs -> always "No..." of type NUMINGROUP == first field in group
-; component :content :content is array of all repeated fields -> multiple of NUMINGROUP
-
-; message > component > group -> group never directly part of message
-; component > group > component -> groups can contain components
-
-; components and fields can have the same name "DerivativeSecurityXML"
-
-; component definitions don't have "required" within top-level attrs -> only the usages have
 
 
 ## Features
@@ -84,35 +78,40 @@ lein gen
 ```
 
 
-## Installation
-
-Download from http://example.com/FIXME.
-
 ## Usage
-How to include lib?
-Calling example
+Just refer the `valid?` method from `fix.core` namespace. The method takes two parameters:
+1) Fix message as string
+2) Custom delimiter (optional) 
+```
+(ns fix.usage
+  (:require [fix.core :refer [valid?]]))
 
-FIXME: explanation
+;Valid Heartbeat FIX message with standard SOH-delimiter
+(def fix-message "8=FIXT.1.19=6535=049=BuySide56=SellSide34=352=20190605-12:45:24.9191128=910=064")
+(valid? fix-message)
+=> true
 
-    $ java -jar fix.core-0.1.0-standalone.jar [args]
+;Valid Heartbeat FIX message with custom '%' delimiter
+(def fix-message "8=FIXT.1.1%9=65%35=0%49=BuySide%56=SellSide%34=3%52=20190605-12:45:24.919%1128=9%10=064")
+(valid? fix-message #"%")
+=> true
 
-## Options
+;Invalid Heartbeat FIX message where the checksum (tag 10) is missing in the end
+(def invalid-fix-message "8=FIXT.1.19=6535=049=BuySide56=SellSide34=352=20190605-12:45:24.9191128=9")
+(valid? invalid-fix-message)
+=> false
 
-FIXME: listing of options this app accepts.
+```
+***Note***: In case you want to use a custom delimiter other than the default SOH-delimiter, be careful which character
+you choose! The delimiter must not be part of the regular FIX message payload and it is also not recommended to use 
+regex control characters as delimiter, which can lead to unexpected side effects and produce incorrect validation results! 
 
-## Examples
-
-...
-
-### Bugs
-
-...
-
+***Note***: Any custom delimiter must be given as a single character regex pattern (java.util.regex.Pattern) of the form #"[char]"
 
 
 ## License
 
-Copyright © 2020 TODO
+Copyright © 2020 Riccardo Valentini
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
