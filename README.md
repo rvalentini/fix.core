@@ -16,17 +16,24 @@ The FIX protocol standard is defined and maintained by the "FIX Trading Communit
 https://www.fixtrading.org/online-specification/introduction/ for more details about the FIX protocol and
 https://www.fixtrading.org/standards/fix-5-0-sp-2/ for the actual FIX protocol definitions)
 
-## Why building a FIX message validator?
+## Why a FIX message validator?
 
+The initial motivation for this library was my interest in clojure.spec. I was trying to get my head around 
+clojure.spec for some time and thought the most effective way to do so, was to apply it to an existing, real-world 
+protocol. Retrospectively, this was not the best idea, since I spent significantly more time implementing the complex 
+FIX validation logic, than actually exploring the depths of clojure.spec. I have no connection to the finance industry 
+whatsoever, so the reason why I picked FIX as test subject is pretty arbitrary and rooted in my personal interest in the
+mechanics of financial markets. This library was created from a purely technical perspective on the FIX-protocol, I have
+no deeper understanding of how professionals are actually using this protocol on a daily basis, which probably had
+an impact on my implementation approach. 
 
-TODO include clojar tag
-TODO (10) write nice README 
-     ;TODO which features? 
-     ;DONE how to use (require etc) with examples
-     ;DONE warning for Regex delimiters
-     ;TODO basic insights about FIX nested possibilities
-TODO (11) publish on Clojars
+This validation library is intended as a debugging tool for developers who are implementing FIX-based
+trading applications and who need an easy way to validate the correctness of FIX messages. I initially planned to 
+embed this library into a slim web application to offer the validation functionality as REST service, which I still
+might do, in case there is demand for it. 
 
+I am always grateful for any feedback, technical, as well as non-technical feedback (maybe on my understanding of FIX) 
+is greatly appreciated :)      
 
 ## Features
 
