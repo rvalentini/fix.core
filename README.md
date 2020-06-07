@@ -1,5 +1,5 @@
 # fix.core
-
+[![Clojars Project](https://img.shields.io/clojars/v/org.clojars.rival/fix.core.svg)](https://clojars.org/org.clojars.rival/fix.core) <br/>
 Financial Information eXchange (FIX) protocol validator using clojure.spec <br/>
 
 ## What is FIX?
