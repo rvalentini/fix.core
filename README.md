@@ -2,6 +2,38 @@
 [![Clojars Project](https://img.shields.io/clojars/v/org.clojars.rival/fix.core.svg)](https://clojars.org/org.clojars.rival/fix.core) <br/>
 Financial Information eXchange (FIX) protocol validator using clojure.spec <br/>
 
+## Installation
+
+Add the following dependency to your project:
+```
+[org.clojars.rival/fix.core "1.0.0"]
+```
+
+## Usage
+Just refer the `valid?` method from `fix.core` namespace. The method takes two parameters:
+1) Fix message as string
+2) Custom delimiter (optional) 
+```
+(ns fix.usage
+  (:require [fix.core :refer [valid?]]))
+
+;Valid Heartbeat FIX message with standard SOH-delimiter
+(def fix-message "8=FIXT.1.19=6535=049=BuySide56=SellSide34=352=20190605-12:45:24.9191128=910=064")
+(valid? fix-message)
+=> true
+
+;Valid Heartbeat FIX message with custom '%' delimiter
+(def fix-message "8=FIXT.1.1%9=65%35=0%49=BuySide%56=SellSide%34=3%52=20190605-12:45:24.919%1128=9%10=064")
+(valid? fix-message #"%")
+=> true
+
+;Invalid Heartbeat FIX message where the checksum (tag 10) is missing in the end
+(def invalid-fix-message "8=FIXT.1.19=6535=049=BuySide56=SellSide34=352=20190605-12:45:24.9191128=9")
+(valid? invalid-fix-message)
+=> false
+
+```
+
 ## What is FIX?
 
 The Financial Information eXchange protocol is an open source communications protocol for the real-time exchange of 
@@ -92,30 +124,6 @@ lein gen
 ```
 
 
-## Usage
-Just refer the `valid?` method from `fix.core` namespace. The method takes two parameters:
-1) Fix message as string
-2) Custom delimiter (optional) 
-```
-(ns fix.usage
-  (:require [fix.core :refer [valid?]]))
-
-;Valid Heartbeat FIX message with standard SOH-delimiter
-(def fix-message "8=FIXT.1.19=6535=049=BuySide56=SellSide34=352=20190605-12:45:24.9191128=910=064")
-(valid? fix-message)
-=> true
-
-;Valid Heartbeat FIX message with custom '%' delimiter
-(def fix-message "8=FIXT.1.1%9=65%35=0%49=BuySide%56=SellSide%34=3%52=20190605-12:45:24.919%1128=9%10=064")
-(valid? fix-message #"%")
-=> true
-
-;Invalid Heartbeat FIX message where the checksum (tag 10) is missing in the end
-(def invalid-fix-message "8=FIXT.1.19=6535=049=BuySide56=SellSide34=352=20190605-12:45:24.9191128=9")
-(valid? invalid-fix-message)
-=> false
-
-```
 ***Note***: In case you want to use a custom delimiter other than the default SOH-delimiter, be careful which character
 you choose! The delimiter must not be part of the regular FIX message payload and it is also not recommended to use 
 regex control characters as delimiter, which can lead to unexpected side effects and produce incorrect validation results! 
