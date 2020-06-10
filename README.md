@@ -120,7 +120,7 @@ The following two files combined defined all relevant data types for the **FIX 5
 The `_combined.xml` version contains both definition files. <br/>
 In case you want to re-generate the FIX protocol definitions (maybe in case of a FIX version update), you can just run
 ```
-lein gen
+lein generate-definitions
 ```
 
 

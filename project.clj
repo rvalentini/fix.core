@@ -12,4 +12,4 @@
   :aliases {"gen-fields" ["with-profile" "gen-fields" "run"]
             "gen-components" ["with-profile" "gen-components" "run"]
             "gen-messages" ["with-profile" "gen-messages" "run"]
-            "gen" ["do" "gen-fields," "gen-components," "gen-messages"]})
+            "generate-definitions" ["do" "gen-fields," "gen-components," "gen-messages"]})
