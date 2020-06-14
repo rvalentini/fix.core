@@ -2,17 +2,20 @@
   (:require [clojure.xml :as xml]))
 
 (defn- extract-fields [seq]
-  (->> seq                                     ;count 1452
+  {:post [(= (count %) 1452)]}
+  (->> seq
        (filter (comp #{:field} :tag))
        (filter (comp #(contains? % :number) :attrs))))
 
 (defn- extract-components [seq]
-  (->> seq                                 ;count 176
+  {:post [(= (count %) 176)]}
+  (->> seq
        (filter (comp #{:component} :tag))
        (filter (comp #(not (contains? % :required)) :attrs))))
 
 (defn- extract-messages [seq]
-  (filter (comp #{:message} :tag) seq))  ;count 115
+  {:post [(= (count %) 115)]}
+  (filter (comp #{:message} :tag) seq))
 
 (defn parse [file]
   (let [xml (xml/parse file)
