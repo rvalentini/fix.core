@@ -39,7 +39,7 @@
        (= (:tag (second head)) :9)
        (= (:tag (nth head 2)) :35)))
 
-(defn evaluate-header [head seq]
+(defn evaluate-header
   "Extracts and validates the FIX <StandardHeader> component block.
    If the validation is successful the method returns the message name, otherwise nil
    The following TAGs are extracted and used for validation:
@@ -47,6 +47,7 @@
    :9 - BodyLength
    :35 - MessageType
    "
+  [head seq]
   (if (empty? head)
     (error "Header evaluation failed: header section is empty!")
     (if (spec/valid? ::s/component [head :Header])
@@ -64,11 +65,12 @@
       (error "Header component is not valid!"))))
 
 
-(defn valid-trailer? [seq]
+(defn valid-trailer?
   "Extracts and validates the FIX <StandardTrailer> component block.
    The following TAGs are extracted and used for validation:
    :10 - Checksum
    "
+  [seq]
   (if-not (= :10 (:tag (last seq)))
     (error "Trailer evaluation failed: trailer section does not contain any checksum!")
     (let [checksum-given (Integer/parseInt (:value (last seq)))

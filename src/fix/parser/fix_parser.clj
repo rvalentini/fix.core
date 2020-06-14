@@ -14,16 +14,16 @@
   (let [tag-empty (some-> (:tag elem) name blank?)
         value-empty (blank? (:value elem))
         valid-tag (some-> (:tag elem) name parse-number is-tag?)]
-    (if tag-empty (error "Tag must no be empty:" elem))
-    (if value-empty (error "Value must not be empty:" elem))
-    (if-not valid-tag (error "The following Tag is not valid:" (:tag elem)))
+    (when tag-empty (error "Tag must no be empty:" elem))
+    (when value-empty (error "Value must not be empty:" elem))
+    (when-not valid-tag (error "The following Tag is not valid:" (:tag elem)))
     (and (not tag-empty) (not value-empty) valid-tag)))
 
 (defn- input-valid? [msg delimiter]
   (let [msg-valid (string? msg)
         delimiter-valid (and (= (type delimiter) Pattern) (count (.pattern delimiter)))]
-    (if-not msg-valid (error "Given message is not a String!"))
-    (if-not delimiter-valid (error "Given delimiter is not a single Char Regex Pattern!"))
+    (when-not msg-valid (error "Given message is not a String!"))
+    (when-not delimiter-valid (error "Given delimiter is not a single Char Regex Pattern!"))
     (and msg-valid delimiter-valid)))
 
 (defn- assoc-size [elem]
@@ -32,7 +32,7 @@
 (defn parse
   ([msg] (parse msg soh-delimiter-rgx))
   ([msg delimiter]
-   (if (input-valid? msg delimiter)
+   (when (input-valid? msg delimiter)
      (let [parsed (->> (split msg delimiter)
                        (map #(split % equals))
                        (map #(identity {:tag (first %) :value (second %)}))
