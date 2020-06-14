@@ -2,13 +2,6 @@
   (:require [fix.parser.xml-parser :as parser]
             [taoensso.timbre :refer [info]]))
 
-(defn- spit-to-file [field-map]
-  (let [header '(ns fix.definitions.fields)
-        var `(def ~'fields ~field-map)]
-    (spit "src/fix/definitions/fields.clj" header)
-    (spit "src/fix/definitions/fields.clj" "\n\n" :append true)
-    (spit "src/fix/definitions/fields.clj" var :append true)))
-
 (defn- extract-enums [value-tags]
   (let [result (map
                  (fn [value-tag]
@@ -33,7 +26,7 @@
     (reduce merge {} gen-fields)))
 
 (defn- generate-source-file [fields]
-  (spit-to-file
+  (spit "resources/fields.edn"
     (extract-definition fields)))
 
 (defn -main [& _]

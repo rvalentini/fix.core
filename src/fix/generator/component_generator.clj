@@ -7,13 +7,6 @@
   {:pre [(= (:tag component) :component)]}
   component)
 
-(defn- spit-to-file [component-map]
-  (let [header '(ns fix.definitions.components)
-        var `(def ~'components ~component-map)]
-    (spit "src/fix/definitions/components.clj" header)
-    (spit "src/fix/definitions/components.clj" "\n\n" :append true)
-    (spit "src/fix/definitions/components.clj" var :append true)))
-
 (defn- flatten-vec-of-vec [arg]
   (if (and (sequential? arg) (= (count arg) 1))
     (first arg)
@@ -70,7 +63,7 @@
                                 {(keyword name) {:ordering   ordering
                                                  :definition (into #{} definition)}}))
                             components)]
-    (spit-to-file (apply merge gen-components))))
+    (spit "resources/components.edn" (apply merge gen-components))))
 
 (defn -main [& _]
   (info "Generating FIX5.0 SP2 COMPONENT sources ... !")

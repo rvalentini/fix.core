@@ -7,13 +7,6 @@
   {:pre [(= (:tag message) :message)]}
   message)
 
-(defn- spit-to-file [message-map]
-  (let [header '(ns fix.definitions.messages)
-        var `(def ~'messages ~message-map)]
-    (spit "src/fix/definitions/messages.clj" header)
-    (spit "src/fix/definitions/messages.clj" "\n\n" :append true)
-    (spit "src/fix/definitions/messages.clj" var :append true)))
-
 (defn- build-component [comp-name attrs]
   {:type     :component
    :required (c/char->boolean (:required attrs))
@@ -43,7 +36,7 @@
                                                   :type msg-type
                                                   :ordering ordering}}))
                          messages)]
-    (spit-to-file (apply merge gen-messages))))
+    (spit "resources/messages.edn" (apply merge gen-messages))))
 
 (defn -main [& _]
   (info "Generating FIX5.0 SP2 MESSAGE sources ... !")
